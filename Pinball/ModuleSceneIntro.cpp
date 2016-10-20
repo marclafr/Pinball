@@ -213,14 +213,99 @@ bool ModuleSceneIntro::Start()
 		245, 448
 	};
 
-	map_bodies.add(App->physics->CreateChain(0, 0, top_collider, 16));
+	int middle_wall[18] = {
+		163, 358,
+		164, 364,
+		166, 369,
+		164, 375,
+		159, 375,
+		157, 365,
+		157, 356,
+		160, 354,
+		163, 356
+	};
+
+	int top_left_lever[28] = {
+		30, 201,
+		41, 206,
+		54, 212,
+		61, 216,
+		66, 217,
+		69, 216,
+		68, 213,
+		56, 200,
+		45, 189,
+		37, 183,
+		30, 184,
+		25, 189,
+		25, 196,
+		29, 200
+	};
+
+	int bot_left_lever[26] = {
+		157, 519,
+		142, 521,
+		134, 520,
+		130, 515,
+		131, 507,
+		137, 502,
+		147, 503,
+		163, 506,
+		179, 509,
+		180, 512,
+		179, 515,
+		172, 516,
+		158, 519
+	};
+
+	int bot_right_lever[26] = {
+		214, 518,
+		234, 521,
+		245, 520,
+		249, 514,
+		246, 507,
+		242, 503,
+		233, 503,
+		212, 507,
+		204, 508,
+		199, 509,
+		198, 512,
+		199, 515,
+		213, 517
+	};
+
+	int top_right_lever[24] = {
+		293, 304,
+		315, 300,
+		321, 297,
+		322, 290,
+		320, 284,
+		314, 281,
+		308, 282,
+		291, 292,
+		275, 301,
+		274, 304,
+		277, 306,
+		291, 304
+	};
+
+	//Map contorn
 	map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 102));
+	//Map walls
+	map_bodies.add(App->physics->CreateChain(0, 0, top_collider, 16));
 	map_bodies.add(App->physics->CreateChain(0, 0, top_left_collider, 18));
 	map_bodies.add(App->physics->CreateChain(0, 0, top_right_collider, 36));
 	map_bodies.add(App->physics->CreateChain(0, 0, mid_right_collider, 32));
 	map_bodies.add(App->physics->CreateChain(0, 0, mid_left_collider, 72));
 	map_bodies.add(App->physics->CreateChain(0, 0, bot_left_collider, 12));
 	map_bodies.add(App->physics->CreateChain(0, 0, bot_right_collider, 10));
+	map_bodies.add(App->physics->CreateChain(0, 0, middle_wall, 18));
+	//Levers
+	map_bodies.add(App->physics->CreateChain(0, 0, top_left_lever, 28));
+	map_bodies.add(App->physics->CreateChain(0, 0, top_right_lever, 24));
+	map_bodies.add(App->physics->CreateChain(0, 0, bot_left_lever, 26));
+	map_bodies.add(App->physics->CreateChain(0, 0, bot_right_lever, 26));
+
 
 	return ret;
 }

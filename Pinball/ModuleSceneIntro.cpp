@@ -28,9 +28,67 @@ bool ModuleSceneIntro::Start()
 	circle = App->textures->Load("pinball/wheel.png"); 
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
+	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+
+	// Pivot 0, 0
+	int pinball_contorn[102] = {
+		142, 594,
+		114, 580,
+		68, 557,
+		42, 529,
+		36, 497,
+		49, 470,
+		52, 434,
+		46, 386,
+		37, 347,
+		30, 348,
+		28, 370,
+		21, 378,
+		11, 377,
+		7, 271,
+		20, 246,
+		39, 230,
+		68, 215,
+		50, 190,
+		22, 148,
+		8, 116,
+		11, 90,
+		36, 56,
+		64, 32,
+		98, 13,
+		132, 4,
+		179, 2,
+		225, 2,
+		279, 20,
+		324, 50,
+		357, 88,
+		378, 134,
+		378, 325,
+		365, 332,
+		354, 324,
+		354, 199,
+		336, 242,
+		315, 276,
+		280, 302,
+		304, 333,
+		332, 373,
+		346, 416,
+		350, 462,
+		345, 511,
+		318, 552,
+		276, 578,
+		239, 597,
+		388, 597,
+		386, 0,
+		2, -1,
+		3, 602,
+		142, 602
+	};
+
+	map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 102));
 
 	return ret;
 }
@@ -144,11 +202,21 @@ update_status ModuleSceneIntro::Update()
 
 	c = ricks.getFirst();
 
-	while(c != NULL)
+	while (c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
+	c = map_bodies.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(background, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

@@ -30,7 +30,7 @@ bool ModulePhysics::Start()
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
-
+	/*
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
@@ -52,6 +52,8 @@ bool ModulePhysics::Start()
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	big_ball->CreateFixture(&fixture);
+	*/
+
 
 	return true;
 }
@@ -154,7 +156,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);

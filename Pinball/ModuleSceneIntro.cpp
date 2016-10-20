@@ -88,7 +88,134 @@ bool ModuleSceneIntro::Start()
 		142, 602
 	};
 
+	int top_collider[16] = {
+		170, 29,
+		209, 28,
+		208, 20,
+		182, 18,
+		159, 18,
+		132, 21,
+		132, 29,
+		167, 29
+	};
+
+	int top_left_collider[18] = {
+		46, 127,
+		52, 137,
+		57, 145,
+		52, 150,
+		46, 144,
+		40, 136,
+		35, 122,
+		41, 119,
+		44, 124
+	};
+
+	int top_right_collider[36] = {
+		253, 108,
+		245, 99,
+		243, 88,
+		244, 78,
+		237, 76,
+		237, 89,
+		239, 97,
+		241, 105,
+		245, 111,
+		253, 116,
+		259, 122,
+		268, 124,
+		277, 126,
+		283, 125,
+		279, 118,
+		272, 118,
+		264, 115,
+		257, 112
+	};
+
+	int mid_right_collider[32] = {
+		265, 261,
+		257, 251,
+		247, 243,
+		233, 236,
+		222, 233,
+		217, 237,
+		224, 239,
+		232, 244,
+		241, 249,
+		248, 254,
+		254, 261,
+		259, 267,
+		262, 273,
+		266, 278,
+		269, 274,
+		267, 264
+	};
+
+	int mid_left_collider[72] = {
+		136, 300,
+		127, 291,
+		118, 282,
+		107, 272,
+		94, 263,
+		82, 257,
+		73, 257,
+		62, 258,
+		53, 262,
+		46, 270,
+		39, 277,
+		36, 283,
+		35, 289,
+		41, 283,
+		45, 279,
+		50, 274,
+		53, 270,
+		59, 266,
+		65, 263,
+		71, 263,
+		79, 263,
+		86, 266,
+		93, 270,
+		99, 275,
+		108, 282,
+		113, 289,
+		120, 295,
+		126, 301,
+		132, 307,
+		137, 313,
+		141, 318,
+		147, 324,
+		150, 322,
+		150, 319,
+		144, 311,
+		139, 304
+	};
+
+	int bot_left_collider[12] = {
+		122, 429,
+		110, 410,
+		108, 439,
+		119, 448,
+		135, 448,
+		124, 432
+	};
+
+
+	int bot_right_collider[10] = {
+		245, 449,
+		257, 450,
+		270, 440,
+		272, 410,
+		245, 448
+	};
+
+	map_bodies.add(App->physics->CreateChain(0, 0, top_collider, 16));
 	map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 102));
+	map_bodies.add(App->physics->CreateChain(0, 0, top_left_collider, 18));
+	map_bodies.add(App->physics->CreateChain(0, 0, top_right_collider, 36));
+	map_bodies.add(App->physics->CreateChain(0, 0, mid_right_collider, 32));
+	map_bodies.add(App->physics->CreateChain(0, 0, mid_left_collider, 72));
+	map_bodies.add(App->physics->CreateChain(0, 0, bot_left_collider, 12));
+	map_bodies.add(App->physics->CreateChain(0, 0, bot_right_collider, 10));
 
 	return ret;
 }

@@ -33,6 +33,11 @@ bool ModuleSceneIntro::Start()
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
+	//sensor_start = App->physics->CreateRectangleSensor(365, 325, 15, 20);
+
+	//initial ball
+	ball = App->physics->CreateCircle(365, 325, 6);
+
 	// Pivot 0, 0
 	int pinball_contorn[102] = {
 		142, 594,

@@ -5,6 +5,7 @@
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
+#include "ModuleSceneIntro.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -30,11 +31,11 @@ bool ModulePhysics::Start()
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
-	/*
+	
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-
+	/*
 	// big static circle as "ground" in the middle of the screen
 	int x = SCREEN_WIDTH / 2;
 	int y = SCREEN_HEIGHT / 1.5f;
@@ -53,8 +54,7 @@ bool ModulePhysics::Start()
 	fixture.shape = &shape;
 	big_ball->CreateFixture(&fixture);
 	*/
-
-
+	
 	return true;
 }
 
@@ -74,6 +74,23 @@ update_status ModulePhysics::PreUpdate()
 		}
 	}
 
+	return UPDATE_CONTINUE;
+}
+
+update_status ModulePhysics::Update()
+{
+
+	//IMPULSING THE BALL
+	//In the future we will apply a sensor.
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		b2Vec2 Force(0, -40);
+		bool force_applied = true;
+		int x, y;
+		App->scene_intro->ball->GetPosition(x, y);
+		if (x > 350 && x < 380 && y>310 && y < 340)
+			App->scene_intro->ball->body->ApplyForceToCenter(Force, force_applied);
+	}
 	return UPDATE_CONTINUE;
 }
 

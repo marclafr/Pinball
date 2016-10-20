@@ -289,6 +289,185 @@ bool ModuleSceneIntro::Start()
 		291, 304
 	};
 
+	int wall_red_weel[46] = {
+		247, 335,
+		258, 335,
+		267, 340,
+		276, 348,
+		283, 359,
+		285, 370,
+		287, 376,
+		290, 378,
+		292, 374,
+		289, 359,
+		283, 348,
+		273, 338,
+		263, 332,
+		256, 331,
+		245, 331,
+		235, 335,
+		225, 340,
+		219, 344,
+		218, 347,
+		220, 348,
+		227, 344,
+		236, 340,
+		246, 335
+	};
+
+	int right_lever_curve[44] = {
+		311, 417,
+		313, 424,
+		310, 428,
+		306, 445,
+		301, 462,
+		288, 479,
+		272, 494,
+		261, 505,
+		250, 513,
+		251, 508,
+		248, 503,
+		242, 501,
+		254, 496,
+		267, 488,
+		277, 481,
+		286, 473,
+		294, 463,
+		299, 454,
+		302, 443,
+		303, 431,
+		305, 421,
+		308, 417
+	};
+
+	int left_lever_curve[48] = {
+		102, 489,
+		114, 500,
+		125, 510,
+		129, 514,
+		129, 511,
+		130, 505,
+		135, 501,
+		137, 500,
+		117, 491,
+		100, 480,
+		87, 465,
+		80, 452,
+		76, 436,
+		74, 421,
+		72, 416,
+		67, 417,
+		66, 422,
+		68, 426,
+		71, 427,
+		71, 436,
+		75, 451,
+		81, 466,
+		91, 479,
+		100, 488
+	};
+
+	int top_right_right[54] = {
+		342, 171,
+		344, 162,
+		346, 150,
+		345, 135,
+		342, 121,
+		334, 103,
+		324, 87,
+		313, 73,
+		303, 62,
+		297, 56,
+		294, 57,
+		294, 61,
+		303, 71,
+		313, 83,
+		321, 93,
+		329, 105,
+		335, 118,
+		339, 130,
+		340, 140,
+		340, 151,
+		338, 162,
+		335, 173,
+		334, 179,
+		335, 182,
+		339, 179,
+		340, 177,
+		341, 174
+	};
+
+	int end_wall_left[40] = {
+		77, 539,
+		88, 548,
+		102, 557,
+		118, 562,
+		136, 565,
+		148, 564,
+		150, 560,
+		148, 552,
+		134, 545,
+		125, 540,
+		112, 532,
+		99, 519,
+		88, 507,
+		78, 494,
+		73, 488,
+		68, 489,
+		63, 500,
+		62, 509,
+		64, 523,
+		75, 537
+	};
+
+	int end_wall_right[50] = {
+		317, 493,
+		320, 506,
+		317, 521,
+		311, 532,
+		299, 543,
+		284, 553,
+		267, 560,
+		252, 563,
+		241, 564,
+		234, 563,
+		231, 557,
+		233, 551,
+		238, 547,
+		245, 545,
+		252, 542,
+		263, 538,
+		274, 531,
+		282, 522,
+		288, 514,
+		295, 505,
+		301, 498,
+		304, 492,
+		307, 489,
+		312, 487,
+		316, 490
+	};
+
+	int yellow_lever[34] = {
+		189, 76,
+		201, 75,
+		214, 73,
+		219, 72,
+		223, 74,
+		229, 74,
+		233, 70,
+		233, 63,
+		227, 59,
+		221, 60,
+		215, 65,
+		205, 66,
+		192, 69,
+		182, 72,
+		180, 72,
+		180, 76,
+		187, 76
+	};
+
 	//Map contorn
 	map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 102));
 	//Map walls
@@ -300,11 +479,20 @@ bool ModuleSceneIntro::Start()
 	map_bodies.add(App->physics->CreateChain(0, 0, bot_left_collider, 12));
 	map_bodies.add(App->physics->CreateChain(0, 0, bot_right_collider, 10));
 	map_bodies.add(App->physics->CreateChain(0, 0, middle_wall, 18));
+	map_bodies.add(App->physics->CreateChain(0, 0, wall_red_weel, 46));
+	map_bodies.add(App->physics->CreateChain(0, 0, right_lever_curve, 44));
+	map_bodies.add(App->physics->CreateChain(0, 0, left_lever_curve, 48));
+	map_bodies.add(App->physics->CreateChain(0, 0, top_right_right, 54));
+	map_bodies.add(App->physics->CreateChain(0, 0, end_wall_left, 40));
+	map_bodies.add(App->physics->CreateChain(0, 0, end_wall_right, 50));
 	//Levers
 	map_bodies.add(App->physics->CreateChain(0, 0, top_left_lever, 28));
 	map_bodies.add(App->physics->CreateChain(0, 0, top_right_lever, 24));
 	map_bodies.add(App->physics->CreateChain(0, 0, bot_left_lever, 26));
 	map_bodies.add(App->physics->CreateChain(0, 0, bot_right_lever, 26));
+	map_bodies.add(App->physics->CreateChain(0, 0, yellow_lever, 34));
+
+	//Create Weels
 
 
 	return ret;

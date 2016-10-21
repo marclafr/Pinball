@@ -34,6 +34,7 @@ bool ModuleSceneIntro::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
 	//sensor_start = App->physics->CreateRectangleSensor(365, 325, 15, 20);
+	lose_sensor = App->physics->CreateRectangleSensor(190, 590, 115, 50);
 
 	//initial ball
 	ball = App->physics->CreateCircle(365, 325, 6);
@@ -332,70 +333,6 @@ bool ModuleSceneIntro::Start()
 		163, 356
 	};
 	//Levers
-	int top_left_lever[28] = {
-		30, 201,
-		41, 206,
-		54, 212,
-		61, 216,
-		66, 217,
-		69, 216,
-		68, 213,
-		56, 200,
-		45, 189,
-		37, 183,
-		30, 184,
-		25, 189,
-		25, 196,
-		29, 200
-	};
-
-	int bot_left_lever[26] = {
-		157, 519,
-		142, 521,
-		134, 520,
-		130, 515,
-		131, 507,
-		137, 502,
-		147, 503,
-		163, 506,
-		179, 509,
-		180, 512,
-		179, 515,
-		172, 516,
-		158, 519
-	};
-
-	int bot_right_lever[26] = {
-		214, 518,
-		234, 521,
-		245, 520,
-		249, 514,
-		246, 507,
-		242, 503,
-		233, 503,
-		212, 507,
-		204, 508,
-		199, 509,
-		198, 512,
-		199, 515,
-		213, 517
-	};
-
-	int top_right_lever[24] = {
-		293, 304,
-		315, 300,
-		321, 297,
-		322, 290,
-		320, 284,
-		314, 281,
-		308, 282,
-		291, 292,
-		275, 301,
-		274, 304,
-		277, 306,
-		291, 304
-	};
-
 	int yellow_lever[34] = {
 		189, 76,
 		201, 75,
@@ -595,10 +532,7 @@ bool ModuleSceneIntro::Start()
 	map_bodies.add(App->physics->CreateChain(0, 0, end_wall_left, 40));
 	map_bodies.add(App->physics->CreateChain(0, 0, end_wall_right, 50));
 	//Levers
-	map_bodies.add(App->physics->CreateChain(0, 0, top_left_lever, 28));
-	map_bodies.add(App->physics->CreateChain(0, 0, top_right_lever, 24));
-	map_bodies.add(App->physics->CreateChain(0, 0, bot_left_lever, 26));
-	map_bodies.add(App->physics->CreateChain(0, 0, bot_right_lever, 26));
+
 	map_bodies.add(App->physics->CreateChain(0, 0, yellow_lever, 34));
 
 	//Create Weels

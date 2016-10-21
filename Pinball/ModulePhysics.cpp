@@ -56,8 +56,101 @@ bool ModulePhysics::Start()
 	fixture.shape = &shape;
 	big_ball->CreateFixture(&fixture);
 	*/
+
+	CreateLevers();
+	CreateScrewers(); //Circles to rotate levers
+
+	p2List_item<PhysBody*>* c = levers.getFirst();
+
+	while (c != NULL)
+	{		
+		b2RevoluteJointDef revoluteJointDef;
+		revoluteJointDef.bodyA = c->data->body;
+		//revoluteJointDef.bodyB = ;
+		revoluteJointDef.collideConnected = false;
+
+		c = c->next;
+	}
 	
 	return true;
+}
+
+void ModulePhysics::CreateLevers()
+{
+	int top_left_lever[28] = {
+		30, 201,
+		41, 206,
+		54, 212,
+		61, 216,
+		66, 217,
+		69, 216,
+		68, 213,
+		56, 200,
+		45, 189,
+		37, 183,
+		30, 184,
+		25, 189,
+		25, 196,
+		29, 200
+	};
+	int bot_left_lever[26] = {
+		157, 519,
+		142, 521,
+		134, 520,
+		130, 515,
+		131, 507,
+		137, 502,
+		147, 503,
+		163, 506,
+		179, 509,
+		180, 512,
+		179, 515,
+		172, 516,
+		158, 519
+	};
+	int bot_right_lever[26] = {
+		214, 518,
+		234, 521,
+		245, 520,
+		249, 514,
+		246, 507,
+		242, 503,
+		233, 503,
+		212, 507,
+		204, 508,
+		199, 509,
+		198, 512,
+		199, 515,
+		213, 517
+	};
+	int top_right_lever[24] = {
+		293, 304,
+		315, 300,
+		321, 297,
+		322, 290,
+		320, 284,
+		314, 281,
+		308, 282,
+		291, 292,
+		275, 301,
+		274, 304,
+		277, 306,
+		291, 304
+	};
+
+	levers.add(App->physics->CreateChain(0, 0, top_left_lever, 28));
+	levers.add(App->physics->CreateChain(0, 0, top_right_lever, 24));
+	levers.add(App->physics->CreateChain(0, 0, bot_left_lever, 26));
+	levers.add(App->physics->CreateChain(0, 0, bot_right_lever, 26));
+}
+
+void ModulePhysics::CreateScrewers()
+{
+	screwers.add(App->physics->CreateCircle(34, 193, 6));
+	screwers.add(App->physics->CreateCircle(312, 290, 6));
+	screwers.add(App->physics->CreateCircle(139, 512, 6));
+	screwers.add(App->physics->CreateCircle(239, 512, 6));
+	//TODO create a method create static circle
 }
 
 // 

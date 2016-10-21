@@ -214,7 +214,7 @@ bool ModulePhysics::CreateWeels()
 	body1.position.Set(PIXEL_TO_METERS(69), PIXEL_TO_METERS(297));
 	b2Body* b1 = world->CreateBody(&body1);
 	b2CircleShape shape1;
-	shape1.m_radius = PIXEL_TO_METERS(20);
+	shape1.m_radius = PIXEL_TO_METERS(18);
 	b2FixtureDef fixture1;
 	fixture1.shape = &shape1;
 	//fixture.density = 1.0f;
@@ -230,7 +230,7 @@ bool ModulePhysics::CreateWeels()
 	body.position.Set(PIXEL_TO_METERS(250), PIXEL_TO_METERS(368));
 	b2Body* b = world->CreateBody(&body);
 	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(20);
+	shape.m_radius = PIXEL_TO_METERS(18);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	b->CreateFixture(&fixture);
@@ -241,7 +241,7 @@ bool ModulePhysics::CreateWeels()
 	body2.position.Set(PIXEL_TO_METERS(224), PIXEL_TO_METERS(283));
 	b2Body* b2 = world->CreateBody(&body2);
 	b2CircleShape shape2;
-	shape2.m_radius = PIXEL_TO_METERS(15);
+	shape2.m_radius = PIXEL_TO_METERS(12);
 	b2FixtureDef fixture2;
 	fixture2.shape = &shape2;
 	b2->CreateFixture(&fixture2);

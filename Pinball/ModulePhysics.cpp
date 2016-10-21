@@ -36,7 +36,7 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
-	CreateWeels();
+	
 	/*
 	// big static circle as "ground" in the middle of the screen
 	int x = SCREEN_WIDTH / 2;
@@ -56,6 +56,7 @@ bool ModulePhysics::Start()
 	fixture.shape = &shape;
 	big_ball->CreateFixture(&fixture);
 	*/
+	CreateWeels();
 
 	CreateLevers();
 	CreateScrewers(); //Circles to rotate levers
@@ -73,6 +74,22 @@ bool ModulePhysics::Start()
 	}
 	
 	return true;
+}
+
+void ModulePhysics::CreateWeels()
+{
+	//Bot left red weel
+	CreateStaticCircle(69, 297, 18);
+	//Bot right red weel
+	CreateStaticCircle(250, 368, 18);
+	//Mid right pink weel
+	CreateStaticCircle(224, 283, 12);
+	//Mid right pink weel
+	CreateStaticCircle(310, 160, 12);
+	//Down blue weel
+	CreateStaticCircle(289, 96, 11);
+	//Top blue weel
+	CreateStaticCircle(270, 78, 11);
 }
 
 void ModulePhysics::CreateLevers()
@@ -146,10 +163,10 @@ void ModulePhysics::CreateLevers()
 
 void ModulePhysics::CreateScrewers()
 {
-	screwers.add(App->physics->CreateCircle(34, 193, 6));
-	screwers.add(App->physics->CreateCircle(312, 290, 6));
-	screwers.add(App->physics->CreateCircle(139, 512, 6));
-	screwers.add(App->physics->CreateCircle(239, 512, 6));
+	screwers.add(CreateStaticCircle(34, 193, 6));
+	screwers.add(CreateStaticCircle(312, 290, 6));
+	screwers.add(CreateStaticCircle(139, 512, 6));
+	screwers.add(CreateStaticCircle(239, 512, 6));
 	//TODO create a method create static circle
 }
 
@@ -193,6 +210,30 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -299,82 +340,6 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-bool ModulePhysics::CreateWeels()
-{
-	//Bot left red weel
-	b2BodyDef body1;
-	body1.type = b2_staticBody;
-	body1.position.Set(PIXEL_TO_METERS(69), PIXEL_TO_METERS(297));
-	b2Body* b1 = world->CreateBody(&body1);
-	b2CircleShape shape1;
-	shape1.m_radius = PIXEL_TO_METERS(18);
-	b2FixtureDef fixture1;
-	fixture1.shape = &shape1;
-	//fixture.density = 1.0f;
-	b1->CreateFixture(&fixture1);
-	//PhysBody* pbody = new PhysBody();
-	//pbody->body = b;
-	//b->SetUserData(pbody);
-	//pbody->width = pbody->height = radius;
-
-	//Bot right red weel
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(250), PIXEL_TO_METERS(368));
-	b2Body* b = world->CreateBody(&body);
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(18);
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	b->CreateFixture(&fixture);
-
-	//Mid right pink weel
-	b2BodyDef body2;
-	body2.type = b2_staticBody;
-	body2.position.Set(PIXEL_TO_METERS(224), PIXEL_TO_METERS(283));
-	b2Body* b2 = world->CreateBody(&body2);
-	b2CircleShape shape2;
-	shape2.m_radius = PIXEL_TO_METERS(12);
-	b2FixtureDef fixture2;
-	fixture2.shape = &shape2;
-	b2->CreateFixture(&fixture2);
-
-	//Mid right pink weel
-	b2BodyDef body3;
-	body3.type = b2_staticBody;
-	body3.position.Set(PIXEL_TO_METERS(310), PIXEL_TO_METERS(160));
-	b2Body* b3 = world->CreateBody(&body3);
-	b2CircleShape shape3;
-	shape3.m_radius = PIXEL_TO_METERS(12);
-	b2FixtureDef fixture3;
-	fixture3.shape = &shape3;
-	b3->CreateFixture(&fixture3);
-
-	//Down blue weel
-	b2BodyDef body4;
-	body4.type = b2_staticBody;
-	body4.position.Set(PIXEL_TO_METERS(289), PIXEL_TO_METERS(96));
-	b2Body* b4 = world->CreateBody(&body4);
-	b2CircleShape shape4;
-	shape4.m_radius = PIXEL_TO_METERS(11);
-	b2FixtureDef fixture4;
-	fixture4.shape = &shape4;
-	b4->CreateFixture(&fixture4);
-
-	//Top blue weel
-	b2BodyDef body5;
-	body5.type = b2_staticBody;
-	body5.position.Set(PIXEL_TO_METERS(270), PIXEL_TO_METERS(78));
-	b2Body* b5 = world->CreateBody(&body5);
-	b2CircleShape shape5;
-	shape5.m_radius = PIXEL_TO_METERS(11);
-	b2FixtureDef fixture5;
-	fixture5.shape = &shape5;
-	b5->CreateFixture(&fixture5);
-
-
-	return true;
-}
 
 // 
 update_status ModulePhysics::PostUpdate()

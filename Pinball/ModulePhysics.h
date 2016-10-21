@@ -44,11 +44,11 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius);
+	PhysBody* CreateStaticCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 
-	bool CreateWeels();
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
@@ -59,6 +59,7 @@ private:
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 
+	void CreateWeels();
 	void CreateLevers();
 	void CreateScrewers();
 

@@ -22,6 +22,8 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 
+	uint score;
+	uint record_score;
 
 	PhysBody* sensor;
 	bool sensed;

@@ -17,6 +17,7 @@ public:
 
 	bool Init();
 	bool CleanUp();
+	update_status Update();
 
 	void SetTitle(const char* title);
 

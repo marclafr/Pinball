@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "p2SString.h"
+#include "ModuleSceneIntro.h"
 
 ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -51,7 +53,8 @@ bool ModuleWindow::Init()
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		p2SString title("Score: %d; Record: %d", App->scene_intro->score, App->scene_intro->record_score);
+		window = SDL_CreateWindow(title.GetString(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 		if(window == NULL)
 		{
@@ -82,6 +85,13 @@ bool ModuleWindow::CleanUp()
 	//Quit SDL subsystems
 	SDL_Quit();
 	return true;
+}
+
+update_status ModuleWindow::Update()
+{
+	p2SString title("Score: %d; Record: %d", App->scene_intro->score, App->scene_intro->record_score);
+	SetTitle(title.GetString());
+	return UPDATE_CONTINUE;
 }
 
 void ModuleWindow::SetTitle(const char* title)

@@ -23,6 +23,9 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	score = 0;
+	record_score = 0;
+
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	circle = App->textures->Load("pinball/wheel.png"); 
@@ -32,10 +35,6 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	//sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
-
-
-
-	
 
 	return ret;
 }

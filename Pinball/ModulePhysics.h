@@ -77,6 +77,7 @@ private:
 	void CreateLevers();
 	void CreateScrewers();
 
+	p2List<PhysBody*> elements_10_p;
 	p2List<PhysBody*> levers;
 	p2List<PhysBody*> screwers;
 };

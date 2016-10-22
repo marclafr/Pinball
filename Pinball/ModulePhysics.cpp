@@ -901,7 +901,7 @@ void ModulePhysics::CreateRevoutionJoints()
 	t_l_joint_def.bodyA = l->data->body;
 	t_l_joint_def.bodyB = s->data->body;
 	t_l_joint_def.collideConnected = false;
-	t_l_joint_def.localAnchorA.Set(0, 0);
+	t_l_joint_def.localAnchorA.Set(PIXEL_TO_METERS(34), PIXEL_TO_METERS(193));
 	t_l_joint_def.localAnchorB.Set(0, 0);
 	t_l_joint_def.referenceAngle = 0;
 	t_l_joint_def.enableLimit = true;
@@ -916,7 +916,7 @@ void ModulePhysics::CreateRevoutionJoints()
 	t_r_joint_def.bodyA = l->data->body;
 	t_r_joint_def.bodyB = s->data->body;
 	t_r_joint_def.collideConnected = false;
-	t_r_joint_def.localAnchorA.Set(0, 0);
+	t_r_joint_def.localAnchorA.Set(PIXEL_TO_METERS(312), PIXEL_TO_METERS(290));
 	t_r_joint_def.localAnchorB.Set(0, 0);
 	t_r_joint_def.referenceAngle = 0;
 	t_r_joint_def.enableLimit = true;
@@ -931,7 +931,7 @@ void ModulePhysics::CreateRevoutionJoints()
 	b_l_joint_def.bodyA = l->data->body;
 	b_l_joint_def.bodyB = s->data->body;
 	b_l_joint_def.collideConnected = false;
-	b_l_joint_def.localAnchorA.Set(0, 0);
+	b_l_joint_def.localAnchorA.Set(PIXEL_TO_METERS(139), PIXEL_TO_METERS(510));
 	b_l_joint_def.localAnchorB.Set(0, 0);
 	b_l_joint_def.referenceAngle = 0;
 	b_l_joint_def.enableLimit = true;
@@ -947,14 +947,13 @@ void ModulePhysics::CreateRevoutionJoints()
 	b_r_joint_def.bodyA = l->data->body;
 	b_r_joint_def.bodyB = s->data->body;
 	b_r_joint_def.collideConnected = false;
-	b_r_joint_def.localAnchorA.Set(0, 0);
+	b_r_joint_def.localAnchorA.Set(PIXEL_TO_METERS(239), PIXEL_TO_METERS(510));
 	b_r_joint_def.localAnchorB.Set(0, 0);
 	b_r_joint_def.referenceAngle = 0;
 	b_r_joint_def.enableLimit = true;
 	b_r_joint_def.lowerAngle = -20 * DEGTORAD;
 	b_r_joint_def.upperAngle = 25 * DEGTORAD;
 	b2RevoluteJoint* rev_joint_b_r = (b2RevoluteJoint*)world->CreateJoint(&b_r_joint_def);
-
 }
 
 
@@ -1097,11 +1096,6 @@ update_status ModulePhysics::PostUpdate()
 		}
 	}
 	
-
-
-
-
-
 	return UPDATE_CONTINUE;
 }
 
@@ -1213,6 +1207,7 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 
 		else if (elements_10_p.find(bodyB) != -1)
 		{
+			//TODO Add Sound
 			App->scene_intro->score += 10;
 		}
 	}

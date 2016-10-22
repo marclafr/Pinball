@@ -57,9 +57,9 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		ray_on = !ray_on;
-		ray.x = App->input->GetMouseX();
-		ray.y = App->input->GetMouseY();
+		//ray_on = !ray_on;
+		//ray.x = App->input->GetMouseX();
+		//ray.y = App->input->GetMouseY();
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -191,25 +191,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	//App->audio->PlayFx(bonus_fx);
 
 	if (bodyA)
 	{
 		//if(bodyB == lose_sensor)
 		App->audio->PlayFx(bonus_fx);
-		//App->physics->ball = App->physics->CreateCircle(365, 325, 6);
 	}
-
-	/*
-	if(bodyA)
-	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}
-
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 }

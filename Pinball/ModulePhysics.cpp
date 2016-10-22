@@ -595,17 +595,25 @@ void ModulePhysics::CreateMap()
 	map_bodies.add(App->physics->CreateChain(0, 0, yellow_lever, 34));
 
 	//Bot left red weel
-	CreateStaticCircle(69, 297, 18);
+	elements_10_p.add(CreateStaticCircle(69, 297, 18));
 	//Bot right red weel
-	CreateStaticCircle(250, 368, 18);
+	elements_10_p.add(CreateStaticCircle(250, 368, 18));
 	//Mid right pink weel
-	CreateStaticCircle(224, 283, 12);
+	elements_10_p.add(CreateStaticCircle(224, 283, 12));
 	//Mid right pink weel
-	CreateStaticCircle(310, 160, 12);
+	elements_10_p.add(CreateStaticCircle(310, 160, 12));
 	//Down blue weel
-	CreateStaticCircle(289, 96, 11);
+	elements_10_p.add(CreateStaticCircle(289, 96, 11));
 	//Top blue weel
-	CreateStaticCircle(270, 78, 11);
+	elements_10_p.add(CreateStaticCircle(270, 78, 11));
+
+	p2List_item<PhysBody*>* item = elements_10_p.getFirst();
+
+	while (item != NULL)
+	{
+		item->data->listener = this;
+		item = item->next;
+	}
 }
 
 void ModulePhysics::CreateSensors()
@@ -682,10 +690,15 @@ update_status ModulePhysics::PreUpdate()
 
 	if (lose_sensed == true)
 	{
-		delete ball;
+		ball->body->GetWorld()->DestroyBody(ball->body);
 		ball = CreateCircle(365, 325, 6);
 		ball->listener = this;
 		lose_sensed = false;
+		if (App->scene_intro->record_score < App->scene_intro->score)
+		{
+			App->scene_intro->record_score = App->scene_intro->score;
+		}
+		App->scene_intro->score = 0;
 	}
 
 	return UPDATE_CONTINUE;
@@ -702,8 +715,12 @@ update_status ModulePhysics::Update()
 		bool force_applied = true;
 		int x, y;
 		ball->GetPosition(x, y);
-		if (x > 350 && x < 380 && y>310 && y < 340)
-			ball->body->ApplyForceToCenter(Force, force_applied);
+		if (start_sensed == true)
+		{
+			//if (x > 350 && x < 380 && y>310 && y < 340)
+				ball->body->ApplyForceToCenter(Force, force_applied);
+				start_sensed = false;
+		}
 	}
 	return UPDATE_CONTINUE;
 }
@@ -737,7 +754,7 @@ PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
 	b2BodyDef body;
 	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
+	
 	b2Body* b = world->CreateBody(&body);
 
 	b2CircleShape shape;
@@ -794,7 +811,6 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 
 	b2FixtureDef fixture;
 	fixture.shape = &box;
-	fixture.density = 1.0f;
 	fixture.isSensor = true;
 
 	b->CreateFixture(&fixture);
@@ -1187,9 +1203,17 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		if (bodyB == lose_sensor)
 		{
 			//App->audio->PlayFx(bonus_fx);
-
-			b2Vec2 reset_ball(365, 325);
 			lose_sensed = true;
+		}
+
+		else if (bodyB == start_sensor)
+		{
+			start_sensed = true;
+		}
+
+		else if (elements_10_p.find(bodyB) != -1)
+		{
+			App->scene_intro->score += 10;
 		}
 	}
 }

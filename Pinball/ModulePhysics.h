@@ -55,6 +55,9 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
+	PhysBody* ball;
+	p2List<PhysBody*> map_bodies;
+
 private:
 
 	bool debug;
@@ -62,7 +65,7 @@ private:
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 
-	void CreateWeels();
+	void CreateMap();
 	void CreateLevers();
 	void CreateScrewers();
 

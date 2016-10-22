@@ -18,12 +18,10 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
-	PhysBody* ball;
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 
-	p2List<PhysBody*> map_bodies;
 
 	PhysBody* sensor;
 	bool sensed;

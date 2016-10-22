@@ -41,7 +41,7 @@ bool ModuleSceneIntro::Start()
 
 	// Pivot 0, 0
 	//Contorn
-	int pinball_contorn[306] = {
+	/*int pinball_contorn[306] = {
 		141, 599,
 		141, 595,
 		131, 593,
@@ -195,7 +195,7 @@ bool ModuleSceneIntro::Start()
 		5, 600,
 		131, 600,
 		140, 600
-	};
+	};*/
 	//Walls
 	int top_collider[16] = {
 		170, 29,
@@ -515,7 +515,7 @@ bool ModuleSceneIntro::Start()
 
 
 	//Map contorn
-	map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 306));
+	//map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 306));
 	//Map walls
 	map_bodies.add(App->physics->CreateChain(0, 0, top_collider, 16));
 	map_bodies.add(App->physics->CreateChain(0, 0, top_left_collider, 18));

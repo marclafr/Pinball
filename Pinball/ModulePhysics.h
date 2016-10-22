@@ -50,6 +50,8 @@ public:
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreatePolygon(int x, int y, int* points, int size);
 
+	void CreateRevoutionJoints();
+
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 

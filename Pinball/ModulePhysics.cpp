@@ -61,6 +61,11 @@ bool ModulePhysics::Start()
 	CreateLevers();
 	CreateScrewers(); //Circles to rotate levers
 
+
+
+	CreateRevoutionJoints();
+
+	/*
 	p2List_item<PhysBody*>* l = levers.getFirst();
 	p2List_item<PhysBody*>* s = screwers.getFirst();
 
@@ -70,12 +75,12 @@ bool ModulePhysics::Start()
 		revoluteJointDef.bodyA = l->data->body;
 		revoluteJointDef.bodyB = s->data->body;
 		revoluteJointDef.collideConnected = false;
-		revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(1), PIXEL_TO_METERS(1));
+		revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
 		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
 		revoluteJointDef.referenceAngle = 0;
 		revoluteJointDef.enableLimit = true;
-		revoluteJointDef.lowerAngle = 0;
-		revoluteJointDef.upperAngle = 45 * DEGTORAD;
+		revoluteJointDef.lowerAngle = -20 * DEGTORAD;
+		revoluteJointDef.upperAngle = 25 * DEGTORAD;
 		revoluteJointDef.enableMotor = true;
 		revoluteJointDef.maxMotorTorque = 20;
 		revoluteJointDef.motorSpeed = 360 * DEGTORAD;
@@ -83,7 +88,8 @@ bool ModulePhysics::Start()
 		l = l->next;
 		s = s->next;
 	}
-	
+	*/
+
 	return true;
 }
 
@@ -113,6 +119,14 @@ void ModulePhysics::CreateLevers()
 		28, 200,
 		25, 191
 	};
+	int top_right_lever[12] = {
+		311, 281,
+		274, 302,
+		276, 305,
+		315, 299,
+		322, 294,
+		321, 284
+	}; 
 	int bot_left_lever[12] = {
 		240, 502,
 		199, 509,
@@ -129,14 +143,7 @@ void ModulePhysics::CreateLevers()
 		130, 515,
 		130, 507
 	};
-	int top_right_lever[12] = {
-		311, 281,
-		274, 302,
-		277, 306,
-		317, 300,
-		323, 294,
-		320, 283
-	};
+	
 
 	levers.add(App->physics->CreatePolygon(0, 0, top_left_lever, 12));
 	levers.add(App->physics->CreatePolygon(0, 0, top_right_lever, 12));
@@ -146,10 +153,10 @@ void ModulePhysics::CreateLevers()
 
 void ModulePhysics::CreateScrewers()
 {
-	screwers.add(CreateStaticCircle(34, 193, 5));
-	screwers.add(CreateStaticCircle(312, 290, 5));
-	screwers.add(CreateStaticCircle(139, 512, 5));
-	screwers.add(CreateStaticCircle(239, 512, 5));
+	screwers.add(CreateStaticCircle(34, 193, 4));
+	screwers.add(CreateStaticCircle(312, 290, 2));
+	screwers.add(CreateStaticCircle(139, 510, 4));
+	screwers.add(CreateStaticCircle(239, 510, 4));
 }
 
 // 
@@ -331,22 +338,22 @@ PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
 	b2Body* b = world->CreateBody(&body);
 
 	b2PolygonShape shape;
-	b2Vec2* p = new b2Vec2[size / 2];
+	b2Vec2* vert = new b2Vec2[size / 2];
 
 	for (uint i = 0; i < size / 2; ++i)
 	{
-		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
-		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+		vert[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		vert[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
 	}
 
-	shape.Set(p, size / 2);
+	shape.Set(vert, size / 2);
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 
 	b->CreateFixture(&fixture);
 
-	delete p;
+	delete vert;
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
@@ -354,6 +361,71 @@ PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
 	pbody->width = pbody->height = 0;
 
 	return pbody;
+}
+
+void ModulePhysics::CreateRevoutionJoints()
+{
+	p2List_item<PhysBody*>* l = levers.getFirst();
+	p2List_item<PhysBody*>* s = screwers.getFirst();
+
+	b2RevoluteJointDef t_l_joint_def;
+	t_l_joint_def.bodyA = l->data->body;
+	t_l_joint_def.bodyB = s->data->body;
+	t_l_joint_def.collideConnected = false;
+	t_l_joint_def.localAnchorA.Set(0, 0);
+	t_l_joint_def.localAnchorB.Set(0, 0);
+	t_l_joint_def.referenceAngle = 0;
+	t_l_joint_def.enableLimit = true;
+	t_l_joint_def.lowerAngle = -20 * DEGTORAD;
+	t_l_joint_def.upperAngle = 25 * DEGTORAD;
+	b2RevoluteJoint* rev_joint_t_l = (b2RevoluteJoint*)world->CreateJoint(&t_l_joint_def);
+
+	l = l->next;
+	s = s->next;
+
+	b2RevoluteJointDef t_r_joint_def;
+	t_r_joint_def.bodyA = l->data->body;
+	t_r_joint_def.bodyB = s->data->body;
+	t_r_joint_def.collideConnected = false;
+	t_r_joint_def.localAnchorA.Set(0, 0);
+	t_r_joint_def.localAnchorB.Set(0, 0);
+	t_r_joint_def.referenceAngle = 0;
+	t_r_joint_def.enableLimit = true;
+	t_r_joint_def.lowerAngle = -20 * DEGTORAD;
+	t_r_joint_def.upperAngle = 25 * DEGTORAD;
+	b2RevoluteJoint* rev_joint_t_r = (b2RevoluteJoint*)world->CreateJoint(&t_r_joint_def);
+
+	l = l->next;
+	s = s->next;
+
+	b2RevoluteJointDef b_l_joint_def;
+	b_l_joint_def.bodyA = l->data->body;
+	b_l_joint_def.bodyB = s->data->body;
+	b_l_joint_def.collideConnected = false;
+	b_l_joint_def.localAnchorA.Set(0, 0);
+	b_l_joint_def.localAnchorB.Set(0, 0);
+	b_l_joint_def.referenceAngle = 0;
+	b_l_joint_def.enableLimit = true;
+	b_l_joint_def.lowerAngle = -20 * DEGTORAD;
+	b_l_joint_def.upperAngle = 25 * DEGTORAD;
+	b2RevoluteJoint* rev_joint_b_l = (b2RevoluteJoint*)world->CreateJoint(&b_l_joint_def);
+
+
+	l = l->next;
+	s = s->next;
+
+	b2RevoluteJointDef b_r_joint_def;
+	b_r_joint_def.bodyA = l->data->body;
+	b_r_joint_def.bodyB = s->data->body;
+	b_r_joint_def.collideConnected = false;
+	b_r_joint_def.localAnchorA.Set(0, 0);
+	b_r_joint_def.localAnchorB.Set(0, 0);
+	b_r_joint_def.referenceAngle = 0;
+	b_r_joint_def.enableLimit = true;
+	b_r_joint_def.lowerAngle = -20 * DEGTORAD;
+	b_r_joint_def.upperAngle = 25 * DEGTORAD;
+	b2RevoluteJoint* rev_joint_b_r = (b2RevoluteJoint*)world->CreateJoint(&b_r_joint_def);
+
 }
 
 

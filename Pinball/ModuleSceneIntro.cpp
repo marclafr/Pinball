@@ -535,9 +535,6 @@ bool ModuleSceneIntro::Start()
 
 	map_bodies.add(App->physics->CreateChain(0, 0, yellow_lever, 34));
 
-	//Create Weels
-
-
 	return ret;
 }
 
@@ -552,6 +549,11 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	{
+
+	}
+
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;

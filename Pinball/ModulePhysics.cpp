@@ -61,16 +61,27 @@ bool ModulePhysics::Start()
 	CreateLevers();
 	CreateScrewers(); //Circles to rotate levers
 
-	p2List_item<PhysBody*>* c = levers.getFirst();
+	p2List_item<PhysBody*>* l = levers.getFirst();
+	p2List_item<PhysBody*>* s = screwers.getFirst();
 
-	while (c != NULL)
+	while (l != NULL)
 	{		
 		b2RevoluteJointDef revoluteJointDef;
-		revoluteJointDef.bodyA = c->data->body;
-		//revoluteJointDef.bodyB = ;
+		revoluteJointDef.bodyA = l->data->body;
+		revoluteJointDef.bodyB = s->data->body;
 		revoluteJointDef.collideConnected = false;
+		revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(1), PIXEL_TO_METERS(1));
+		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+		revoluteJointDef.referenceAngle = 0;
+		revoluteJointDef.enableLimit = true;
+		revoluteJointDef.lowerAngle = 0;
+		revoluteJointDef.upperAngle = 45 * DEGTORAD;
+		revoluteJointDef.enableMotor = true;
+		revoluteJointDef.maxMotorTorque = 20;
+		revoluteJointDef.motorSpeed = 360 * DEGTORAD;
 
-		c = c->next;
+		l = l->next;
+		s = s->next;
 	}
 	
 	return true;
@@ -94,80 +105,51 @@ void ModulePhysics::CreateWeels()
 
 void ModulePhysics::CreateLevers()
 {
-	int top_left_lever[28] = {
-		30, 201,
-		41, 206,
-		54, 212,
-		61, 216,
-		66, 217,
-		69, 216,
-		68, 213,
-		56, 200,
-		45, 189,
-		37, 183,
-		30, 184,
-		25, 189,
-		25, 196,
-		29, 200
+	int top_left_lever[12] = {
+		31, 184,
+		41, 185,
+		69, 214,
+		66, 218,
+		28, 200,
+		25, 191
 	};
-	int bot_left_lever[26] = {
-		157, 519,
-		142, 521,
-		134, 520,
-		130, 515,
-		131, 507,
-		137, 502,
-		147, 503,
-		163, 506,
-		179, 509,
-		180, 512,
-		179, 515,
-		172, 516,
-		158, 519
-	};
-	int bot_right_lever[26] = {
-		214, 518,
-		234, 521,
-		245, 520,
-		249, 514,
-		246, 507,
-		242, 503,
-		233, 503,
-		212, 507,
-		204, 508,
+	int bot_left_lever[12] = {
+		240, 502,
 		199, 509,
-		198, 512,
-		199, 515,
-		213, 517
+		198, 515,
+		240, 522,
+		248, 517,
+		249, 508
 	};
-	int top_right_lever[24] = {
-		293, 304,
-		315, 300,
-		321, 297,
-		322, 290,
-		320, 284,
-		314, 281,
-		308, 282,
-		291, 292,
-		275, 301,
-		274, 304,
+	int bot_right_lever[12] = {
+		138, 502,
+		180, 509,
+		180, 515,
+		139, 521,
+		130, 515,
+		130, 507
+	};
+	int top_right_lever[12] = {
+		311, 281,
+		274, 302,
 		277, 306,
-		291, 304
+		317, 300,
+		323, 294,
+		320, 283
 	};
 
-	levers.add(App->physics->CreateChain(0, 0, top_left_lever, 28));
-	levers.add(App->physics->CreateChain(0, 0, top_right_lever, 24));
-	levers.add(App->physics->CreateChain(0, 0, bot_left_lever, 26));
-	levers.add(App->physics->CreateChain(0, 0, bot_right_lever, 26));
+	levers.add(App->physics->CreatePolygon(0, 0, top_left_lever, 12));
+	levers.add(App->physics->CreatePolygon(0, 0, top_right_lever, 12));
+	levers.add(App->physics->CreatePolygon(0, 0, bot_left_lever, 12));
+	levers.add(App->physics->CreatePolygon(0, 0, bot_right_lever, 12));
 }
 
 void ModulePhysics::CreateScrewers()
 {
-	screwers.add(CreateStaticCircle(34, 193, 6));
-	screwers.add(CreateStaticCircle(312, 290, 6));
-	screwers.add(CreateStaticCircle(139, 512, 6));
-	screwers.add(CreateStaticCircle(239, 512, 6));
-	//TODO create a method create static circle
+	screwers.add(CreateStaticCircle(34, 193, 5));
+	screwers.add(CreateStaticCircle(312, 290, 5));
+	screwers.add(CreateStaticCircle(139, 512, 5));
+	screwers.add(CreateStaticCircle(239, 512, 5));
 }
 
 // 
@@ -324,6 +306,40 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	}
 
 	shape.CreateLoop(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.Set(p, size / 2);
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;

@@ -57,7 +57,7 @@ bool ModulePhysics::Start()
 	big_ball->CreateFixture(&fixture);
 	*/
 	CreateMap();
-
+	CreateSensors();
 	CreateLevers();
 	CreateScrewers(); //Circles to rotate levers
 
@@ -96,11 +96,11 @@ bool ModulePhysics::Start()
 void ModulePhysics::CreateMap()
 {
 	//initial ball
-	ball = App->physics->CreateCircle(365, 325, 6);
+	ball = CreateCircle(365, 325, 6);
+	ball->listener = this;
 
-	// Pivot 0, 0
 	//Contorn
-	/*int pinball_contorn[306] = {
+	int pinball_contorn[306] = {
 	141, 599,
 	141, 595,
 	131, 593,
@@ -254,7 +254,8 @@ void ModulePhysics::CreateMap()
 	5, 600,
 	131, 600,
 	140, 600
-	};*/
+	};
+
 	//Walls
 	int top_collider[16] = {
 		170, 29,
@@ -554,7 +555,7 @@ void ModulePhysics::CreateMap()
 
 
 	//Map contorn
-	//map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 306));
+	map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 306));
 	//Map walls
 	map_bodies.add(CreateChain(0, 0, top_collider, 16));
 	map_bodies.add(CreateChain(0, 0, top_left_collider, 18));
@@ -605,6 +606,12 @@ void ModulePhysics::CreateMap()
 	CreateStaticCircle(289, 96, 11);
 	//Top blue weel
 	CreateStaticCircle(270, 78, 11);
+}
+
+void ModulePhysics::CreateSensors()
+{
+	start_sensor = CreateRectangleSensor(365, 325, 15, 20);
+	lose_sensor = CreateRectangleSensor(190, 590, 115, 50);
 }
 
 void ModulePhysics::CreateLevers()
@@ -667,10 +674,18 @@ update_status ModulePhysics::PreUpdate()
 		if(c->GetFixtureA()->IsSensor() && c->IsTouching())
 		{
 			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
-			PhysBody* pb2 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
 			if(pb1 && pb2 && pb1->listener)
 				pb1->listener->OnCollision(pb1, pb2);
 		}
+	}
+
+	if (lose_sensed == true)
+	{
+		delete ball;
+		ball = CreateCircle(365, 325, 6);
+		ball->listener = this;
+		lose_sensed = false;
 	}
 
 	return UPDATE_CONTINUE;
@@ -1158,4 +1173,23 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+}
+
+
+void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
+{
+	int x, y;
+
+	//App->audio->PlayFx(bonus_fx);
+
+	if (bodyA)
+	{
+		if (bodyB == lose_sensor)
+		{
+			//App->audio->PlayFx(bonus_fx);
+
+			b2Vec2 reset_ball(365, 325);
+			lose_sensed = true;
+		}
+	}
 }

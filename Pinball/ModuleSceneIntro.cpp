@@ -31,10 +31,9 @@ bool ModuleSceneIntro::Start()
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	//sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
-	//sensor_start = App->physics->CreateRectangleSensor(365, 325, 15, 20);
-	lose_sensor = App->physics->CreateRectangleSensor(190, 590, 115, 50);
+
 
 	
 
@@ -193,7 +192,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	App->audio->PlayFx(bonus_fx);
+	//App->audio->PlayFx(bonus_fx);
+
+	if (bodyA)
+	{
+		//if(bodyB == lose_sensor)
+		App->audio->PlayFx(bonus_fx);
+		//App->physics->ball = App->physics->CreateCircle(365, 325, 6);
+	}
 
 	/*
 	if(bodyA)

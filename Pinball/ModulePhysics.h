@@ -43,6 +43,8 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
+	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateStaticCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
@@ -58,6 +60,11 @@ public:
 	PhysBody* ball;
 	p2List<PhysBody*> map_bodies;
 
+
+	PhysBody* start_sensor;
+	bool start_sensed;
+	PhysBody* lose_sensor;
+	bool lose_sensed;
 private:
 
 	bool debug;
@@ -66,6 +73,7 @@ private:
 	b2Body* ground;
 
 	void CreateMap();
+	void CreateSensors();
 	void CreateLevers();
 	void CreateScrewers();
 

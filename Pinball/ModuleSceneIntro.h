@@ -26,9 +26,6 @@ public:
 	PhysBody* sensor;
 	bool sensed;
 
-	PhysBody* lose_sensor;
-	bool lose_sensed;
-
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;

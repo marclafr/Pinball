@@ -196,53 +196,45 @@ update_status ModuleSceneIntro::Update()
 	//Top left lever
 	if (c != NULL)
 	{
-		int x, y;
-		c->data->GetPosition(x, y);
 		SDL_Rect r;
 		r.w = 43;
 		r.h = 33;
 		r.x = 95;
 		r.y = 0;
-		App->renderer->Blit(elements,x + 25, y + 185, &r, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(elements, + 25,  + 183, &r, 1.0f, c->data->GetRotation(), 8, 8);
 		c = c->next;
 	}
 	//top_right_lever 
 	if (c != NULL)
 	{
-		int x, y;
-		c->data->GetPosition(x, y);
 		SDL_Rect r;
 		r.w = 48;
 		r.h = 26;
 		r.x = 0;
 		r.y = 0;
-		App->renderer->Blit(elements, x+275, y+282, &r, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(elements, +275, +280, &r, 1.0f, c->data->GetRotation(), 37, 10);
 		c = c->next;
 	}
 	//bot_left_lever 
 	if (c != NULL)
 	{
-		int x, y;
-		c->data->GetPosition(x, y);
 		SDL_Rect r;
 		r.w = 48;
 		r.h = 18;
 		r.x = 138;
 		r.y = 0;
-		App->renderer->Blit(elements, x+133, y+501, &r, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(elements, 133, 501, &r, 1.0f, c->data->GetRotation(), 8, 8);
 		c = c->next;
 	}
 	//bot_left_lever 
 	if (c != NULL)
 	{
-		int x, y;
-		c->data->GetPosition((x), (y));
 		SDL_Rect r;
 		r.w = 48;
 		r.h = 19;
 		r.x = 48;
 		r.y = 0;
-		App->renderer->Blit(elements, x+199, y+501, &r, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(elements, +199, +501, &r, 1.0f, c->data->GetRotation(), 37, 10);
 		c = c->next;
 	}
 

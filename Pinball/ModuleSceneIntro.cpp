@@ -196,6 +196,7 @@ update_status ModuleSceneIntro::Update()
 		r.h = 33;
 		r.x = 95;
 		r.y = 0;
+		App->renderer->Blit(elements,x + 25, y + 185, &r, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 	//top_right_lever 
@@ -208,6 +209,7 @@ update_status ModuleSceneIntro::Update()
 		r.h = 26;
 		r.x = 0;
 		r.y = 0;
+		App->renderer->Blit(elements, x+275, y+282, &r, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 	//bot_left_lever 
@@ -220,6 +222,7 @@ update_status ModuleSceneIntro::Update()
 		r.h = 18;
 		r.x = 138;
 		r.y = 0;
+		App->renderer->Blit(elements, x+133, y+501, &r, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 	//bot_left_lever 
@@ -232,6 +235,7 @@ update_status ModuleSceneIntro::Update()
 		r.h = 19;
 		r.x = 48;
 		r.y = 0;
+		App->renderer->Blit(elements, x+199, y+501, &r, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

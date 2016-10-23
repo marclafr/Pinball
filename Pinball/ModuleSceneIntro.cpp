@@ -33,6 +33,7 @@ bool ModuleSceneIntro::Start()
 	rick = App->textures->Load("pinball/rick_head.png");
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	elements = App->textures->Load("pinball/pinball_elements.png");
 
 	//sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
@@ -182,6 +183,56 @@ update_status ModuleSceneIntro::Update()
 
 		if(normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
+	}
+
+	c = App->physics->levers.getFirst();
+	//Top left lever
+	if (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		SDL_Rect r;
+		r.w = 43;
+		r.h = 33;
+		r.x = 95;
+		r.y = 0;
+		c = c->next;
+	}
+	//top_right_lever 
+	if (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		SDL_Rect r;
+		r.w = 48;
+		r.h = 26;
+		r.x = 0;
+		r.y = 0;
+		c = c->next;
+	}
+	//bot_left_lever 
+	if (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		SDL_Rect r;
+		r.w = 48;
+		r.h = 18;
+		r.x = 138;
+		r.y = 0;
+		c = c->next;
+	}
+	//bot_left_lever 
+	if (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition((x), (y));
+		SDL_Rect r;
+		r.w = 48;
+		r.h = 19;
+		r.x = 48;
+		r.y = 0;
+		c = c->next;
 	}
 
 	return UPDATE_CONTINUE;

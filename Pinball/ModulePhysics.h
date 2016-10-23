@@ -60,7 +60,7 @@ public:
 	PhysBody* ball;
 	p2List<PhysBody*> map_bodies;
 
-
+	p2List<PhysBody*> levers;
 	PhysBody* start_sensor;
 	bool start_sensed;
 	PhysBody* lose_sensor;
@@ -78,6 +78,6 @@ private:
 	void CreateScrewers();
 
 	p2List<PhysBody*> elements_10_p;
-	p2List<PhysBody*> levers;
+	
 	p2List<PhysBody*> screwers;
 };

@@ -50,6 +50,7 @@ void ModulePhysics::CreateMap()
 {
 	//initial ball
 	ball = CreateCircle(365, 325, 6);
+	ball->body->IsBullet();
 	ball->listener = this;
 
 	//Contorn
@@ -652,6 +653,7 @@ update_status ModulePhysics::PreUpdate()
 	{
 		ball->body->GetWorld()->DestroyBody(ball->body);
 		ball = CreateCircle(365, 325, 6);
+		ball->body->IsBullet();
 		ball->listener = this;
 		lose_sensed = false;
 		if (App->scene_intro->record_score < App->scene_intro->score)
@@ -941,8 +943,8 @@ void ModulePhysics::CreateRevoutionJoints()
 	b_r_joint_def.localAnchorA.Set(PIXEL_TO_METERS(239), PIXEL_TO_METERS(510));
 	b_r_joint_def.localAnchorB.Set(0, 0);
 	b_r_joint_def.enableLimit = true;
-	b_r_joint_def.lowerAngle = 0 * DEGTORAD;
-	b_r_joint_def.upperAngle = 45 * DEGTORAD;
+	b_r_joint_def.lowerAngle = -45 * DEGTORAD;
+	b_r_joint_def.upperAngle = 0 * DEGTORAD;
 	b2RevoluteJoint* rev_joint_b_r = (b2RevoluteJoint*)world->CreateJoint(&b_r_joint_def);
 
 	//force

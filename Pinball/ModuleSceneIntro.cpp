@@ -51,13 +51,13 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
 		App->physics->force_makers.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -200), true);
 		App->physics->force_makers.getFirst()->next->next->data->body->ApplyForceToCenter(b2Vec2(0, -200), true);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		App->physics->force_makers.getFirst()->next->data->body->ApplyForceToCenter(b2Vec2(0, -200), true);
 		App->physics->force_makers.getLast()->data->body->ApplyForceToCenter(b2Vec2(0, -200), true);

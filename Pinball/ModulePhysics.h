@@ -65,6 +65,9 @@ public:
 	bool start_sensed;
 	PhysBody* lose_sensor;
 	bool lose_sensed;
+
+	p2List<PhysBody*> force_makers;
+
 private:
 
 	bool debug;
@@ -76,8 +79,10 @@ private:
 	void CreateSensors();
 	void CreateLevers();
 	void CreateScrewers();
+	void CreateLeverForceMakers();
 
 	p2List<PhysBody*> elements_10_p;
 	
 	p2List<PhysBody*> screwers;
+	
 };

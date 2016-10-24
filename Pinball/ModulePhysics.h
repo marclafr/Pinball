@@ -49,6 +49,7 @@ public:
 	PhysBody* CreateStaticCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	PhysBody* CreatePolygonSensor(int x, int y, int* points, int size);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreatePolygon(int x, int y, int* points, int size);
 
@@ -65,6 +66,8 @@ public:
 	bool start_sensed;
 	PhysBody* lose_sensor;
 	bool lose_sensed;
+	PhysBody* d_points_sensor;
+	bool d_points_sensed;
 
 	p2List<PhysBody*> force_makers;
 

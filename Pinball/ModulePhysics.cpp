@@ -546,7 +546,8 @@ void ModulePhysics::CreateMap()
 		180, 76,
 		187, 76
 	};
-	map_bodies.add(App->physics->CreateChain(0, 0, yellow_lever, 34));
+	//map_bodies.add(App->physics->CreateChain(0, 0, yellow_lever, 34));
+	//TODO: "screw" from the yellow lever must not be a sensor but a physic body.
 
 	//Bot left red weel
 	elements_10_p.add(CreateStaticCircle(69, 297, 18));
@@ -574,6 +575,18 @@ void ModulePhysics::CreateSensors()
 {
 	start_sensor = CreateRectangleSensor(365, 325, 15, 20);
 	lose_sensor = CreateRectangleSensor(190, 590, 115, 50);
+
+	int yellow_lever[16] = {
+		189, 76,
+		201, 75,
+		214, 73,
+		219, 72,
+		223, 74,
+		229, 74,
+		233, 70,
+		233, 63,
+	};
+	d_points_sensor = App->physics->CreatePolygonSensor(0, 0, yellow_lever, 16);
 }
 
 void ModulePhysics::CreateLevers()
@@ -684,6 +697,13 @@ update_status ModulePhysics::Update()
 				start_sensed = false;
 		}
 	}
+
+	if (d_points_sensed == true)
+	{
+		//TODO this must double points not give 500 like now.(to test)
+		App->scene_intro->score += 500;
+		d_points_sensed = false;
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -782,6 +802,39 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreatePolygonSensor(int x, int y, int* points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape shape;
+	b2Vec2* vert = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		vert[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		vert[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.Set(vert, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.isSensor = true;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
 
 	return pbody;
 }
@@ -1210,6 +1263,11 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		{
 			//TODO Add Sound
 			App->scene_intro->score += 10;
+		}
+
+		else if (bodyB == d_points_sensor)
+		{
+			d_points_sensed = true;
 		}
 	}
 }

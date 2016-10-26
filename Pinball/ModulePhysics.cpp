@@ -57,6 +57,12 @@ void ModulePhysics::CreateMap()
 	ball->body->IsBullet();
 	ball->listener = this;
 
+	//starting impulsor
+	spring_base = CreateRectangle(367, 400, 7, 10, b2_staticBody);
+	spring_impulser = CreateRectangle(364, 361, 10, 50, b2_dynamicBody);
+	CreateLineJoint(spring_impulser->body, spring_base->body, b2Vec2(0, 0), b2Vec2(0, 0), 1.0f, 0.0f);
+
+
 	//Contorn
 	int pinball_contorn[306] = {
 	141, 599,
@@ -765,16 +771,20 @@ update_status ModulePhysics::PreUpdate()
 update_status ModulePhysics::Update()
 {
 	//IMPULSING THE BALL
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	static float force = +500;
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		int x, y;
-		ball->GetPosition(x, y);
 		if (start_sensed == true)
 		{
-			//if (x > 350 && x < 380 && y>310 && y < 340)
-				ball->body->ApplyForceToCenter(b2Vec2(0, -80), true);
-				start_sensed = false;
+			//TODO: Modify values/map in order to get correct functionality
+			if (force < 5000)
+			force += 50;
 		}
+	}
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	{
+		spring_impulser->body->ApplyForceToCenter(b2Vec2 (0, -force), true);
+		start_sensed = false;
 	}
 
 	if (button_up_sensed == true)
@@ -878,10 +888,17 @@ PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius, float res)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType type)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	if (type == b2_dynamicBody)
+	{
+		body.type = b2_dynamicBody;
+	}
+	else if (type == b2_staticBody)
+	{
+		body.type = b2_staticBody;
+	}
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -890,7 +907,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 
 	b2FixtureDef fixture;
 	fixture.shape = &box;
-	fixture.density = 1.0f;
+	fixture.density = 25.0f;
 
 	b->CreateFixture(&fixture);
 
@@ -1239,6 +1256,19 @@ void ModulePhysics::DeleteTemporaryJoint()
 {
 	world->DestroyJoint(temp_rev_joint);
 	temp_rev_joint = nullptr;
+}
+
+b2DistanceJointDef* ModulePhysics::CreateLineJoint(b2Body * bodyA, b2Body * bodyB, b2Vec2 Local_Anchor_A, b2Vec2 Local_Anchor_B, float frequency, float damping)
+{
+	b2DistanceJointDef DistanceJoinDef;
+	DistanceJoinDef.bodyA = bodyA;
+	DistanceJoinDef.bodyB = bodyB;
+	DistanceJoinDef.localAnchorA.Set(PIXEL_TO_METERS(Local_Anchor_A.x), PIXEL_TO_METERS(Local_Anchor_A.y));
+	DistanceJoinDef.localAnchorB.Set(PIXEL_TO_METERS(Local_Anchor_B.x), PIXEL_TO_METERS(Local_Anchor_B.y));
+	DistanceJoinDef.dampingRatio = damping;
+	DistanceJoinDef.frequencyHz = frequency;
+	b2DistanceJointDef* dis_joint = (b2DistanceJointDef*)world->CreateJoint(&DistanceJoinDef);
+	return dis_joint;
 }
 
 // 

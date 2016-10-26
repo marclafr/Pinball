@@ -629,6 +629,25 @@ void ModulePhysics::CreateSensors()
 		233, 63,
 	};
 	d_points_sensor = CreatePolygonSensor(0, 0, yellow_lever, 16);
+
+	//top
+	shiny_circles.add(CreateCircleSensor(360, 138, 4));
+	shiny_circles.add(CreateCircleSensor(350, 103, 4));
+	shiny_circles.add(CreateCircleSensor(330, 77, 4));
+	shiny_circles.add(CreateCircleSensor(305, 54, 4));
+
+	//bot left
+	shiny_circles.add(CreateCircleSensor(58, 275, 4));
+	shiny_circles.add(CreateCircleSensor(80, 273, 4));
+	shiny_circles.add(CreateCircleSensor(96, 284, 4));
+	shiny_circles.add(CreateCircleSensor(111, 301, 4));
+
+	//bot right
+	shiny_circles.add(CreateCircleSensor(223, 359, 4));
+	shiny_circles.add(CreateCircleSensor(241, 348, 4));
+	shiny_circles.add(CreateCircleSensor(264, 350, 4));
+	shiny_circles.add(CreateCircleSensor(275, 369, 4));
+
 }
 
 void ModulePhysics::CreateLevers()
@@ -886,6 +905,30 @@ PhysBody* ModulePhysics::CreatePolygonSensor(int x, int y, int* points, int size
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
+PhysBody * ModulePhysics::CreateCircleSensor(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.isSensor = true;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
 
 	return pbody;
 }
@@ -1377,7 +1420,17 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		else if (elements_10_p.find(bodyB) != -1)
 		{
 			//TODO Add Sound
-			App->scene_intro->score += 10;
+			App->scene_intro->score += 100;
+			int i = elements_10_p.find(bodyB);
+			if (i == 0 || i == 1)
+			{
+				//pink
+
+			}
+			else if (i == 2 || i == 3)
+			{
+				//blue
+			}
 		}
 
 		else if (bodyB == d_points_sensor)
@@ -1389,6 +1442,13 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		{
 			l_impulse_sensed = true;
 			start_time = GetTickCount();
+		}
+
+		else if (shiny_circles.find(bodyB) != -1)
+		{
+			int x, y;
+			bodyB->GetPosition(x, y);
+			//TODO Function for animation
 		}
 	}
 }

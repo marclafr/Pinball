@@ -754,6 +754,7 @@ update_status ModulePhysics::Update()
 			l_impulse_sensed = false;
 		}
 	}
+
 	return UPDATE_CONTINUE;
 }
 

@@ -235,6 +235,18 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(elements, +199, +501, &r, 1.0f, c->data->GetRotation(), 37, 10);
 		c = c->next;
 	}
+	//ball texture
+	if (App->physics->ball != NULL)
+	{
+		int x_ball, y_ball;
+		App->physics->ball->GetPosition(x_ball, y_ball);
+		SDL_Rect r;
+		r.w = 12;
+		r.h = 12;
+		r.x = 57;
+		r.y = 27;
+		App->renderer->Blit(elements, x_ball, y_ball, &r, 1.0f);
+	}
 
 	c = App->physics->red_wheels.getFirst();
 	if (c != NULL)

@@ -399,31 +399,41 @@ void ModulePhysics::CreateMap()
 		308, 417
 	};
 
-	int left_lever_curve[48] = {
-		102, 489,
-		114, 500,
-		125, 510,
-		129, 514,
-		129, 511,
-		130, 505,
-		135, 501,
-		137, 500,
-		117, 491,
-		100, 480,
-		87, 465,
-		80, 452,
-		76, 436,
-		74, 421,
-		72, 416,
-		67, 417,
-		66, 422,
-		68, 426,
+	int left_lever_curve[68] = {
+		74, 422,
+		74, 429,
+		75, 436,
+		77, 442,
+		80, 450,
+		83, 456,
+		87, 463,
+		93, 470,
+		101, 478,
+		108, 484,
+		117, 489,
+		123, 493,
+		129, 497,
+		134, 499,
+		133, 502,
+		130, 504,
+		128, 507,
+		128, 512,
+		130, 515,
+		124, 509,
+		116, 502,
+		105, 492,
+		93, 480,
+		85, 471,
+		79, 460,
+		75, 450,
+		72, 441,
+		71, 432,
 		71, 427,
-		71, 436,
-		75, 451,
-		81, 466,
-		91, 479,
-		100, 488
+		68, 425,
+		66, 420,
+		68, 417,
+		72, 417,
+		74, 420
 	};
 
 	int top_right_right[54] = {
@@ -521,7 +531,7 @@ void ModulePhysics::CreateMap()
 	map_bodies.add(CreateChain(0, 0, middle_wall, 18));
 	map_bodies.add(CreateChain(0, 0, wall_red_weel, 46));
 	map_bodies.add(CreateChain(0, 0, right_lever_curve, 44));
-	map_bodies.add(CreateChain(0, 0, left_lever_curve, 48));
+	map_bodies.add(CreateChain(0, 0, left_lever_curve, 68));
 	map_bodies.add(CreateChain(0, 0, top_right_right, 54));
 	map_bodies.add(CreateChain(0, 0, end_wall_left, 40));
 	map_bodies.add(CreateChain(0, 0, end_wall_right, 50));
@@ -607,13 +617,15 @@ void ModulePhysics::CreateLevers()
 		322, 294,
 		321, 284
 	}; 
-	int bot_left_lever[12] = {
-		138, 502,
-		180, 509,
-		180, 515,
+	int bot_left_lever[16] = {
 		139, 521,
-		130, 515,
-		130, 507
+		179, 515,
+		180, 512,
+		178, 509,
+		140, 502,
+		132, 506,
+		132, 516,
+		137, 520
 	};
 	int bot_right_lever[12] = {
 		240, 502,
@@ -626,7 +638,7 @@ void ModulePhysics::CreateLevers()
 
 	levers.add(App->physics->CreatePolygon(0, 0, top_left_lever, 12));
 	levers.add(App->physics->CreatePolygon(0, 0, top_right_lever, 12));
-	levers.add(App->physics->CreatePolygon(0, 0, bot_left_lever, 12));
+	levers.add(App->physics->CreatePolygon(0, 0, bot_left_lever, 16));
 	levers.add(App->physics->CreatePolygon(0, 0, bot_right_lever, 12));
 }
 

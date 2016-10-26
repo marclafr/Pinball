@@ -52,6 +52,7 @@ public:
 	PhysBody* CreatePolygonSensor(int x, int y, int* points, int size);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreatePolygon(int x, int y, int* points, int size);
+	PhysBody* CreateStaticRestPolygon(int x, int y, int* points, int size, int res);
 
 	void CreateRevoutionJoints();
 
@@ -87,6 +88,7 @@ private:
 	void CreateLeverForceMakers();
 
 	p2List<PhysBody*> elements_10_p;
+	p2List<PhysBody*> restit_bodies;
 	
 	p2List<PhysBody*> screwers;
 	uint start_time;

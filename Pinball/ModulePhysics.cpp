@@ -320,21 +320,26 @@ void ModulePhysics::CreateMap()
 		39, 287
 	};
 
-	int bot_left_collider[12] = {
-		122, 429,
-		110, 410,
-		108, 439,
-		119, 448,
-		135, 448,
-		124, 432
+	int bot_left_collider[16] = {
+		110, 408,
+		108, 438,
+		121, 449,
+		137, 448,
+		139, 443,
+		124, 441,
+		115, 434,
+		114, 407
 	};
 
-	int bot_right_collider[10] = {
-		245, 449,
-		257, 450,
-		270, 440,
-		272, 410,
-		245, 448
+	int bot_right_collider[16] = {
+		243, 449,
+		261, 450,
+		273, 441,
+		271, 406,
+		265, 409,
+		268, 434,
+		260, 443,
+		242, 443
 	};
 
 	int middle_wall[18] = {
@@ -528,8 +533,25 @@ void ModulePhysics::CreateMap()
 	map_bodies.add(CreateChain(0, 0, top_right_collider, 36));
 	map_bodies.add(CreateChain(0, 0, mid_right_collider, 32));
 	map_bodies.add(CreateChain(0, 0, mid_left_collider, 82));
-	map_bodies.add(CreateChain(0, 0, bot_left_collider, 12));
-	map_bodies.add(CreateChain(0, 0, bot_right_collider, 10));
+	map_bodies.add(CreateChain(0, 0, bot_left_collider, 16));
+	map_bodies.add(CreateChain(0, 0, bot_right_collider, 16));
+
+	int res_left[8] = {
+		111, 407,
+		111, 413,
+		134, 445,
+		139, 446
+	};
+	restit_bodies.add(CreateStaticRestPolygon(0, 0, res_left, 8, 10));
+	int res_right[8] = {
+		243, 446,
+		249, 446,
+		270, 415,
+		268, 408
+	};
+	restit_bodies.add(CreateStaticRestPolygon(0, 0, res_right, 8, 10));
+
+
 	map_bodies.add(CreateChain(0, 0, middle_wall, 18));
 	map_bodies.add(CreateChain(0, 0, wall_red_weel, 46));
 	map_bodies.add(CreateChain(0, 0, right_lever_curve, 44));
@@ -586,7 +608,7 @@ void ModulePhysics::CreateMap()
 void ModulePhysics::CreateSensors()
 {
 	start_sensor = CreateRectangleSensor(365, 325, 15, 20);
-	lose_sensor = CreateRectangleSensor(190, 590, 115, 50);
+	lose_sensor = CreateRectangleSensor(190, 630, 300, 50);
 
 	l_impulse_sensor = CreateRectangleSensor(18, 366, 26, 26);
 
@@ -640,10 +662,10 @@ void ModulePhysics::CreateLevers()
 		249, 508
 	};
 
-	levers.add(App->physics->CreatePolygon(0, 0, top_left_lever, 12));
-	levers.add(App->physics->CreatePolygon(0, 0, top_right_lever, 12));
-	levers.add(App->physics->CreatePolygon(0, 0, bot_left_lever, 16));
-	levers.add(App->physics->CreatePolygon(0, 0, bot_right_lever, 12));
+	levers.add(CreatePolygon(0, 0, top_left_lever, 12));
+	levers.add(CreatePolygon(0, 0, top_right_lever, 12));
+	levers.add(CreatePolygon(0, 0, bot_left_lever, 16));
+	levers.add(CreatePolygon(0, 0, bot_right_lever, 12));
 }
 
 void ModulePhysics::CreateScrewers()
@@ -921,6 +943,40 @@ PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	//fixture.restitution = res; devolver la bola
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateStaticRestPolygon(int x, int y, int* points, int size, int res)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape shape;
+	b2Vec2* vert = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		vert[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		vert[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.Set(vert, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.restitution = res;
 	fixture.density = 1.0f;
 
 	b->CreateFixture(&fixture);

@@ -43,6 +43,8 @@ bool ModulePhysics::Start()
 
 	CreateRevoutionJoints();
 
+	start_time = GetTickCount();
+
 	return true;
 }
 
@@ -586,6 +588,8 @@ void ModulePhysics::CreateSensors()
 	start_sensor = CreateRectangleSensor(365, 325, 15, 20);
 	lose_sensor = CreateRectangleSensor(190, 590, 115, 50);
 
+	l_impulse_sensor = CreateRectangleSensor(18, 366, 26, 26);
+
 	int yellow_lever[16] = {
 		189, 76,
 		201, 75,
@@ -596,7 +600,7 @@ void ModulePhysics::CreateSensors()
 		233, 70,
 		233, 63,
 	};
-	d_points_sensor = App->physics->CreatePolygonSensor(0, 0, yellow_lever, 16);
+	d_points_sensor = CreatePolygonSensor(0, 0, yellow_lever, 16);
 }
 
 void ModulePhysics::CreateLevers()
@@ -715,6 +719,16 @@ update_status ModulePhysics::Update()
 		//TODO this must double points not give 500 like now.(to test)
 		App->scene_intro->score += 500;
 		d_points_sensed = false;
+	}
+
+	if (l_impulse_sensed == true)
+	{
+
+		if (GetTickCount() - start_time > 3000)
+		{
+			ball->body->ApplyForceToCenter(b2Vec2(0, -100), true);
+			l_impulse_sensed = false;
+		}
 	}
 	return UPDATE_CONTINUE;
 }
@@ -1280,6 +1294,12 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		else if (bodyB == d_points_sensor)
 		{
 			d_points_sensed = true;
+		}
+
+		else if (bodyB == l_impulse_sensor)
+		{
+			l_impulse_sensed = true;
+			start_time = GetTickCount();
 		}
 	}
 }

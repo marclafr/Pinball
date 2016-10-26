@@ -68,6 +68,8 @@ public:
 	bool lose_sensed;
 	PhysBody* d_points_sensor;
 	bool d_points_sensed;
+	PhysBody* l_impulse_sensor;
+	bool l_impulse_sensed;
 
 	p2List<PhysBody*> force_makers;
 
@@ -87,5 +89,5 @@ private:
 	p2List<PhysBody*> elements_10_p;
 	
 	p2List<PhysBody*> screwers;
-	
+	uint start_time;
 };

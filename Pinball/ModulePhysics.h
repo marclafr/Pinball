@@ -99,4 +99,7 @@ private:
 
 	p2List<PhysBody*> screwers;
 	uint start_time;
+
+	uint bonus_time;
+	uint bonus_score;
 };

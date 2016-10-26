@@ -44,6 +44,7 @@ bool ModulePhysics::Start()
 	CreateRevoutionJoints();
 
 	start_time = GetTickCount();
+	bonus_time = GetTickCount() + 30000;
 
 	return true;
 }
@@ -213,29 +214,6 @@ void ModulePhysics::CreateMap()
 	};
 
 	//Walls
-	int top_collider[16] = {
-		170, 29,
-		209, 28,
-		208, 20,
-		182, 18,
-		159, 18,
-		132, 21,
-		132, 29,
-		167, 29
-	};
-
-	int top_left_collider[18] = {
-		46, 127,
-		52, 137,
-		57, 145,
-		52, 150,
-		46, 144,
-		40, 136,
-		35, 122,
-		41, 119,
-		44, 124
-	};
-
 	int top_right_collider[36] = {
 		253, 108,
 		245, 99,
@@ -524,32 +502,67 @@ void ModulePhysics::CreateMap()
 		316, 490
 	};
 
-
 	//Map contorn
 	map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 306, 0));
 	//Map walls
-	map_bodies.add(CreateChain(0, 0, top_collider, 16, 0.7f));
-	map_bodies.add(CreateChain(0, 0, top_left_collider, 18, 0.7f));
 	map_bodies.add(CreateChain(0, 0, top_right_collider, 36, 0));
 	map_bodies.add(CreateChain(0, 0, mid_right_collider, 32, 0));
 	map_bodies.add(CreateChain(0, 0, mid_left_collider, 82, 0));
 	map_bodies.add(CreateChain(0, 0, bot_left_collider, 16, 0));
 	map_bodies.add(CreateChain(0, 0, bot_right_collider, 16, 0));
 
+	//Elements that give points
+
+	//Mid right pink weel
+	elements_100_p.add(CreateStaticCircle(224, 283, 12, 1));
+	//Mid right pink weel
+	elements_100_p.add(CreateStaticCircle(310, 160, 12, 1));
+	//Down blue weel
+	elements_100_p.add(CreateStaticCircle(289, 96, 11, 1));
+	//Top blue weel
+	elements_100_p.add(CreateStaticCircle(270, 78, 11, 1));
+
+	//top walls
+	int top_collider[16] = {
+		170, 29,
+		209, 28,
+		208, 20,
+		182, 18,
+		159, 18,
+		132, 21,
+		132, 29,
+		167, 29
+	};
+
+	int top_left_collider[18] = {
+		46, 127,
+		52, 137,
+		57, 145,
+		52, 150,
+		46, 144,
+		40, 136,
+		35, 122,
+		41, 119,
+		44, 124
+	};
+	elements_100_p.add(CreateChain(0, 0, top_collider, 16, 0.7f));
+	elements_100_p.add(CreateChain(0, 0, top_left_collider, 18, 0.7f));
+
+	//bot restitution walls
 	int res_left[8] = {
 		111, 410,
 		111, 413,
 		134, 445,
 		139, 446
 	};
-	restit_bodies.add(CreateStaticRestPolygon(0, 0, res_left, 8, 1.5f));
+	elements_100_p.add(CreateStaticRestPolygon(0, 0, res_left, 8, 1.5f));
 	int res_right[8] = {
 		243, 446,
 		249, 446,
 		270, 415,
 		268, 408
 	};
-	restit_bodies.add(CreateStaticRestPolygon(0, 0, res_right, 8, 1.5f));
+	elements_100_p.add(CreateStaticRestPolygon(0, 0, res_right, 8, 1.5f));
 
 
 	map_bodies.add(CreateChain(0, 0, middle_wall, 18, 0));
@@ -570,17 +583,6 @@ void ModulePhysics::CreateMap()
 
 	screwers.add(CreateStaticCircle(69, 297, 2, 0));
 	screwers.add(CreateStaticCircle(250, 368, 2, 0));
-
-
-
-	//Mid right pink weel
-	elements_100_p.add(CreateStaticCircle(224, 283, 12, 1));
-	//Mid right pink weel
-	elements_100_p.add(CreateStaticCircle(310, 160, 12, 1));
-	//Down blue weel
-	elements_100_p.add(CreateStaticCircle(289, 96, 11, 1));
-	//Top blue weel
-	elements_100_p.add(CreateStaticCircle(270, 78, 11, 1));
 
 	p2List_item<PhysBody*>* item = elements_100_p.getFirst();
 
@@ -717,6 +719,7 @@ update_status ModulePhysics::PreUpdate()
 			App->scene_intro->record_score = App->scene_intro->score;
 		}
 		App->scene_intro->score = 0;
+		bonus_time += 30000; //ends the bonus points as soon as the new game starts
 	}
 
 	if (button_pressed_sensed == true)
@@ -725,6 +728,7 @@ update_status ModulePhysics::PreUpdate()
 		button = nullptr;
 		button_pressed->body->GetWorld()->DestroyBody(button_pressed->body);
 		button_pressed = nullptr;
+		bonus_time = GetTickCount();
 		//TODO: Animation button down
 		button_pressed_sensed = false;
 	}
@@ -772,7 +776,7 @@ update_status ModulePhysics::Update()
 			};
 			button_pressed = CreatePolygonSensor(0, 0, button_press_points, 8);
 		}
-		App->scene_intro->score += 500;
+		App->scene_intro->score += 500 * bonus_score;
 		button_up_sensed = false;
 	}
 
@@ -784,6 +788,16 @@ update_status ModulePhysics::Update()
 			ball->body->ApplyForceToCenter(b2Vec2(0, -100), true);
 			l_impulse_sensed = false;
 		}
+	}
+
+
+	if (GetTickCount() - bonus_time < 30000)
+	{
+		bonus_score = 2;
+	}
+	else
+	{
+		bonus_score = 1;
 	}
 
 	return UPDATE_CONTINUE;
@@ -1423,7 +1437,7 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		else if (elements_100_p.find(bodyB) != -1)
 		{
 			//TODO Add Sound
-			App->scene_intro->score += 100;
+			App->scene_intro->score += 100 * bonus_score;
 			int i = elements_100_p.find(bodyB);
 			if (i == 0 || i == 1)
 			{
@@ -1454,6 +1468,7 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		{
 			int x, y;
 			bodyB->GetPosition(x, y);
+			App->scene_intro->score += 25 * bonus_score;
 			//TODO Function for animation
 		}
 

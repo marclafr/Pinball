@@ -537,19 +537,19 @@ void ModulePhysics::CreateMap()
 	map_bodies.add(CreateChain(0, 0, bot_right_collider, 16));
 
 	int res_left[8] = {
-		111, 407,
+		111, 410,
 		111, 413,
 		134, 445,
 		139, 446
 	};
-	restit_bodies.add(CreateStaticRestPolygon(0, 0, res_left, 8, 10));
+	restit_bodies.add(CreateStaticRestPolygon(0, 0, res_left, 8, 1.5f));
 	int res_right[8] = {
 		243, 446,
 		249, 446,
 		270, 415,
 		268, 408
 	};
-	restit_bodies.add(CreateStaticRestPolygon(0, 0, res_right, 8, 10));
+	restit_bodies.add(CreateStaticRestPolygon(0, 0, res_right, 8, 1.5f));
 
 
 	map_bodies.add(CreateChain(0, 0, middle_wall, 18));
@@ -584,9 +584,15 @@ void ModulePhysics::CreateMap()
 	//TODO: "screw" from the yellow lever must not be a sensor but a physic body.
 
 	//Bot left red weel
-	elements_10_p.add(CreateStaticCircle(69, 297, 18));
+	red_wheels.add(CreateCircle(69, 297, 18));
 	//Bot right red weel
-	elements_10_p.add(CreateStaticCircle(250, 368, 18));
+	red_wheels.add(CreateCircle(250, 368, 18));
+
+	screwers.add(CreateStaticCircle(69, 297, 2));
+	screwers.add(CreateStaticCircle(250, 368, 2));
+
+
+
 	//Mid right pink weel
 	elements_10_p.add(CreateStaticCircle(224, 283, 12));
 	//Mid right pink weel
@@ -719,19 +725,15 @@ update_status ModulePhysics::PreUpdate()
 
 update_status ModulePhysics::Update()
 {
-
 	//IMPULSING THE BALL
-	//In the future we will apply a sensor.
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		b2Vec2 Force(0, -40);
-		bool force_applied = true;
 		int x, y;
 		ball->GetPosition(x, y);
 		if (start_sensed == true)
 		{
 			//if (x > 350 && x < 380 && y>310 && y < 340)
-				ball->body->ApplyForceToCenter(Force, force_applied);
+				ball->body->ApplyForceToCenter(b2Vec2(0, -80), true);
 				start_sensed = false;
 		}
 	}
@@ -767,7 +769,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 1.0f;
+	fixture.density = 2.0f;
 
 	b->CreateFixture(&fixture);
 
@@ -942,7 +944,7 @@ PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	//fixture.restitution = res; devolver la bola
+	//fixture.restitution = res;
 	fixture.density = 1.0f;
 
 	b->CreateFixture(&fixture);
@@ -955,7 +957,7 @@ PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateStaticRestPolygon(int x, int y, int* points, int size, int res)
+PhysBody* ModulePhysics::CreateStaticRestPolygon(int x, int y, int* points, int size, float res)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -994,6 +996,37 @@ void ModulePhysics::CreateRevoutionJoints()
 	p2List_item<PhysBody*>* l = levers.getFirst();
 	p2List_item<PhysBody*>* s = screwers.getFirst();
 	p2List_item<PhysBody*>* f = force_makers.getFirst();
+	p2List_item<PhysBody*>* r_w = red_wheels.getFirst();
+
+	b2RevoluteJointDef red_w_l_def;
+	red_w_l_def.bodyA = r_w->data->body;
+	red_w_l_def.bodyB = s->data->body;
+	red_w_l_def.collideConnected = false;
+	red_w_l_def.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+	red_w_l_def.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+	red_w_l_def.referenceAngle = 0;
+	red_w_l_def.enableLimit = false;
+	red_w_l_def.enableMotor = true;
+	red_w_l_def.maxMotorTorque = 1;
+	red_w_l_def.motorSpeed = 90 * DEGTORAD;
+	b2RevoluteJoint* rev_joint_red_w_l = (b2RevoluteJoint*)world->CreateJoint(&red_w_l_def);
+	
+	s = s->next;
+	r_w = r_w->next;
+
+	b2RevoluteJointDef red_w_r_def;
+	red_w_r_def.bodyA = r_w->data->body;
+	red_w_r_def.bodyB = s->data->body;
+	red_w_r_def.collideConnected = false;
+	red_w_r_def.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+	red_w_r_def.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+	red_w_r_def.enableLimit = false;
+	red_w_r_def.enableMotor = true;
+	red_w_r_def.maxMotorTorque = 1;
+	red_w_r_def.motorSpeed = -90 * DEGTORAD;
+	b2RevoluteJoint* rev_joint_red_w_r = (b2RevoluteJoint*)world->CreateJoint(&red_w_r_def);
+
+	s = s->next;
 
 	//stick top left
 	b2RevoluteJointDef t_l_joint_def;
@@ -1091,7 +1124,6 @@ void ModulePhysics::CreateRevoutionJoints()
 	b_r_f_joint_def.localAnchorB.Set(0, 0);
 	b2RevoluteJoint* rev_joint_b_r_f = (b2RevoluteJoint*)world->CreateJoint(&b_r_f_joint_def);
 }
-
 
 // 
 update_status ModulePhysics::PostUpdate()

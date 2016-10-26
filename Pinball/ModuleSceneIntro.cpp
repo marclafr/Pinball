@@ -35,8 +35,6 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	elements = App->textures->Load("pinball/pinball_elements.png");
 
-	//sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
-
 	return ret;
 }
 
@@ -235,6 +233,28 @@ update_status ModuleSceneIntro::Update()
 		r.x = 48;
 		r.y = 0;
 		App->renderer->Blit(elements, +199, +501, &r, 1.0f, c->data->GetRotation(), 37, 10);
+		c = c->next;
+	}
+
+	c = App->physics->red_wheels.getFirst();
+	if (c != NULL)
+	{
+		SDL_Rect r;
+		r.w = 38;
+		r.h = 38;
+		r.x = 154;
+		r.y = 18;
+		App->renderer->Blit(elements, +50, +278, &r, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+	if (c != NULL)
+	{
+		SDL_Rect r;
+		r.w = 38;
+		r.h = 38;
+		r.x = 154;
+		r.y = 18;
+		App->renderer->Blit(elements, +231, +349, &r, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

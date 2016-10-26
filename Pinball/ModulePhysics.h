@@ -52,7 +52,7 @@ public:
 	PhysBody* CreatePolygonSensor(int x, int y, int* points, int size);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreatePolygon(int x, int y, int* points, int size);
-	PhysBody* CreateStaticRestPolygon(int x, int y, int* points, int size, int res);
+	PhysBody* CreateStaticRestPolygon(int x, int y, int* points, int size, float res);
 
 	void CreateRevoutionJoints();
 
@@ -73,6 +73,7 @@ public:
 	bool l_impulse_sensed;
 
 	p2List<PhysBody*> force_makers;
+	p2List<PhysBody*> red_wheels;
 
 private:
 

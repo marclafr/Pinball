@@ -45,6 +45,7 @@ bool ModulePhysics::Start()
 
 	start_time = GetTickCount();
 	bonus_time = GetTickCount() + 30000;
+	rot_time = GetTickCount() + 4000;
 
 	return true;
 }
@@ -584,6 +585,8 @@ void ModulePhysics::CreateMap()
 	screwers.add(CreateStaticCircle(69, 297, 2, 0));
 	screwers.add(CreateStaticCircle(250, 368, 2, 0));
 
+	rot_circle = CreateCircleSensor(133, 252, 7);
+
 	p2List_item<PhysBody*>* item = elements_100_p.getFirst();
 
 	while (item != NULL)
@@ -731,6 +734,29 @@ update_status ModulePhysics::PreUpdate()
 		bonus_time = GetTickCount();
 		//TODO: Animation button down
 		button_pressed_sensed = false;
+	}
+
+	if (rot_ball == true)
+	{
+		if (joint_created == false)
+		{
+			joint_created = CreateTemporaryJoint();
+		}
+		else
+		{
+			App->scene_intro->score += 1;
+		}
+		if (GetTickCount() - rot_time > 3000)
+		{
+			DeleteTemporaryJoint();
+			joint_created = false;
+			rot_ball = false;
+			int x, y;
+			x = rand() % 100 - 50;
+			y = rand() % 100 - 50;
+			b2Vec2 force(x, y);
+			ball->body->ApplyForceToCenter(force, true);
+		}
 	}
 
 	return UPDATE_CONTINUE;
@@ -1197,6 +1223,24 @@ void ModulePhysics::CreateRevoutionJoints()
 	b2RevoluteJoint* rev_joint_b_r_f = (b2RevoluteJoint*)world->CreateJoint(&b_r_f_joint_def);
 }
 
+bool ModulePhysics::CreateTemporaryJoint()
+{
+	b2RevoluteJointDef temp_joint_def;
+	temp_joint_def.bodyA = ball->body;
+	temp_joint_def.bodyB = rot_circle->body;
+	temp_joint_def.collideConnected = false;
+	temp_joint_def.localAnchorA.Set(0, 0);
+	temp_joint_def.localAnchorB.Set(0, 0);
+	temp_rev_joint = (b2RevoluteJoint*)world->CreateJoint(&temp_joint_def);
+	return true;
+}
+
+void ModulePhysics::DeleteTemporaryJoint()
+{
+	world->DestroyJoint(temp_rev_joint);
+	temp_rev_joint = nullptr;
+}
+
 // 
 update_status ModulePhysics::PostUpdate()
 {
@@ -1480,6 +1524,13 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 				button_pressed_sensed = true;
 				//TODO: animation button up
 			}
+		}
+
+		//Rotation circle
+		if (bodyB == rot_circle && rot_ball == false && GetTickCount() - rot_time > 4000)
+		{
+			rot_time = GetTickCount();
+			rot_ball = true;
 		}
 
 	}

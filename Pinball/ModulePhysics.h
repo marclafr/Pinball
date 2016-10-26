@@ -93,11 +93,20 @@ private:
 
 	p2List<PhysBody*> elements_100_p;
 	p2List<PhysBody*> restit_bodies;
+	p2List<PhysBody*> screwers;
+
 	PhysBody* button;
 	PhysBody* button_pressed;
 	bool button_pressed_sensed;
+	
+	PhysBody* rot_circle;
+	uint rot_time;
+	bool rot_ball;
+	b2RevoluteJoint* temp_rev_joint;
+	bool joint_created;
+	bool CreateTemporaryJoint();
+	void DeleteTemporaryJoint();
 
-	p2List<PhysBody*> screwers;
 	uint start_time;
 
 	uint bonus_time;

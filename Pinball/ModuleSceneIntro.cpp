@@ -49,6 +49,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	Animations();
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
 		App->physics->force_makers.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -100), true);
@@ -283,4 +284,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		//if(bodyB == lose_sensor)
 		App->audio->PlayFx(bonus_fx);
 	}
+}
+
+void ModuleSceneIntro::Animations()
+{
+
 }

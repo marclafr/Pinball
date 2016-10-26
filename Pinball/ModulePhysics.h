@@ -31,7 +31,7 @@ public:
 };
 
 // Module --------------------------------------
-class ModulePhysics : public Module, public b2ContactListener // TODO
+class ModulePhysics : public Module, public b2ContactListener
 {
 public:
 	ModulePhysics(Application* app, bool start_enabled = true);
@@ -46,12 +46,12 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateStaticCircle(int x, int y, int radius);
+	PhysBody* CreateStaticCircle(int x, int y, int radius, float res);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreatePolygonSensor(int x, int y, int* points, int size);
 	PhysBody* CreateCircleSensor(int x, int y, int radius);
-	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateChain(int x, int y, int* points, int size, float res);
 	PhysBody* CreatePolygon(int x, int y, int* points, int size);
 	PhysBody* CreateStaticRestPolygon(int x, int y, int* points, int size, float res);
 
@@ -68,8 +68,8 @@ public:
 	bool start_sensed;
 	PhysBody* lose_sensor;
 	bool lose_sensed;
-	PhysBody* d_points_sensor;
-	bool d_points_sensed;
+	PhysBody* button_up_sensor;
+	bool button_up_sensed;
 	PhysBody* l_impulse_sensor;
 	bool l_impulse_sensed;
 	p2List<PhysBody*> shiny_circles;
@@ -91,9 +91,12 @@ private:
 	void CreateScrewers();
 	void CreateLeverForceMakers();
 
-	p2List<PhysBody*> elements_10_p;
+	p2List<PhysBody*> elements_100_p;
 	p2List<PhysBody*> restit_bodies;
-	
+	PhysBody* button;
+	PhysBody* button_pressed;
+	bool button_pressed_sensed;
+
 	p2List<PhysBody*> screwers;
 	uint start_time;
 };

@@ -526,15 +526,15 @@ void ModulePhysics::CreateMap()
 
 
 	//Map contorn
-	map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 306));
+	map_bodies.add(App->physics->CreateChain(0, 0, pinball_contorn, 306, 0));
 	//Map walls
-	map_bodies.add(CreateChain(0, 0, top_collider, 16));
-	map_bodies.add(CreateChain(0, 0, top_left_collider, 18));
-	map_bodies.add(CreateChain(0, 0, top_right_collider, 36));
-	map_bodies.add(CreateChain(0, 0, mid_right_collider, 32));
-	map_bodies.add(CreateChain(0, 0, mid_left_collider, 82));
-	map_bodies.add(CreateChain(0, 0, bot_left_collider, 16));
-	map_bodies.add(CreateChain(0, 0, bot_right_collider, 16));
+	map_bodies.add(CreateChain(0, 0, top_collider, 16, 0.7f));
+	map_bodies.add(CreateChain(0, 0, top_left_collider, 18, 0.7f));
+	map_bodies.add(CreateChain(0, 0, top_right_collider, 36, 0));
+	map_bodies.add(CreateChain(0, 0, mid_right_collider, 32, 0));
+	map_bodies.add(CreateChain(0, 0, mid_left_collider, 82, 0));
+	map_bodies.add(CreateChain(0, 0, bot_left_collider, 16, 0));
+	map_bodies.add(CreateChain(0, 0, bot_right_collider, 16, 0));
 
 	int res_left[8] = {
 		111, 410,
@@ -552,57 +552,37 @@ void ModulePhysics::CreateMap()
 	restit_bodies.add(CreateStaticRestPolygon(0, 0, res_right, 8, 1.5f));
 
 
-	map_bodies.add(CreateChain(0, 0, middle_wall, 18));
-	map_bodies.add(CreateChain(0, 0, wall_red_weel, 46));
-	map_bodies.add(CreateChain(0, 0, right_lever_curve, 44));
-	map_bodies.add(CreateChain(0, 0, left_lever_curve, 68));
-	map_bodies.add(CreateChain(0, 0, top_right_right, 54));
-	map_bodies.add(CreateChain(0, 0, end_wall_left, 40));
-	map_bodies.add(CreateChain(0, 0, end_wall_right, 50));
+	map_bodies.add(CreateChain(0, 0, middle_wall, 18, 0));
+	map_bodies.add(CreateChain(0, 0, wall_red_weel, 46, 0));
+	map_bodies.add(CreateChain(0, 0, right_lever_curve, 44, 0));
+	map_bodies.add(CreateChain(0, 0, left_lever_curve, 68, 0));
+	map_bodies.add(CreateChain(0, 0, top_right_right, 54, 0));
+	map_bodies.add(CreateChain(0, 0, end_wall_left, 40, 0));
+	map_bodies.add(CreateChain(0, 0, end_wall_right, 50, 0));
 	
-	//Yellow lever TODO this should be a sensor, as it allows he ball to pass, makes an animation and gives points
-	int yellow_lever[34] = {
-		189, 76,
-		201, 75,
-		214, 73,
-		219, 72,
-		223, 74,
-		229, 74,
-		233, 70,
-		233, 63,
-		227, 59,
-		221, 60,
-		215, 65,
-		205, 66,
-		192, 69,
-		182, 72,
-		180, 72,
-		180, 76,
-		187, 76
-	};
-	//map_bodies.add(App->physics->CreateChain(0, 0, yellow_lever, 34));
-	//TODO: "screw" from the yellow lever must not be a sensor but a physic body.
+	//Yellow lever
+	CreateStaticCircle(234, 71, 4, 0);
 
 	//Bot left red weel
 	red_wheels.add(CreateCircle(69, 297, 18));
 	//Bot right red weel
 	red_wheels.add(CreateCircle(250, 368, 18));
 
-	screwers.add(CreateStaticCircle(69, 297, 2));
-	screwers.add(CreateStaticCircle(250, 368, 2));
+	screwers.add(CreateStaticCircle(69, 297, 2, 0));
+	screwers.add(CreateStaticCircle(250, 368, 2, 0));
 
 
 
 	//Mid right pink weel
-	elements_10_p.add(CreateStaticCircle(224, 283, 12));
+	elements_100_p.add(CreateStaticCircle(224, 283, 12, 1));
 	//Mid right pink weel
-	elements_10_p.add(CreateStaticCircle(310, 160, 12));
+	elements_100_p.add(CreateStaticCircle(310, 160, 12, 1));
 	//Down blue weel
-	elements_10_p.add(CreateStaticCircle(289, 96, 11));
+	elements_100_p.add(CreateStaticCircle(289, 96, 11, 1));
 	//Top blue weel
-	elements_10_p.add(CreateStaticCircle(270, 78, 11));
+	elements_100_p.add(CreateStaticCircle(270, 78, 11, 1));
 
-	p2List_item<PhysBody*>* item = elements_10_p.getFirst();
+	p2List_item<PhysBody*>* item = elements_100_p.getFirst();
 
 	while (item != NULL)
 	{
@@ -628,7 +608,7 @@ void ModulePhysics::CreateSensors()
 		233, 70,
 		233, 63,
 	};
-	d_points_sensor = CreatePolygonSensor(0, 0, yellow_lever, 16);
+	button_up_sensor = CreatePolygonSensor(0, 0, yellow_lever, 16);
 
 	//top
 	shiny_circles.add(CreateCircleSensor(360, 138, 4));
@@ -695,10 +675,10 @@ void ModulePhysics::CreateLevers()
 
 void ModulePhysics::CreateScrewers()
 {
-	screwers.add(CreateStaticCircle(34, 193, 1));
-	screwers.add(CreateStaticCircle(312, 290, 1));
-	screwers.add(CreateStaticCircle(139, 510, 1));
-	screwers.add(CreateStaticCircle(239, 510, 1));
+	screwers.add(CreateStaticCircle(34, 193, 1, 0));
+	screwers.add(CreateStaticCircle(312, 290, 1, 0));
+	screwers.add(CreateStaticCircle(139, 510, 1, 0));
+	screwers.add(CreateStaticCircle(239, 510, 1, 0));
 }
 
 void ModulePhysics::CreateLeverForceMakers()
@@ -739,6 +719,16 @@ update_status ModulePhysics::PreUpdate()
 		App->scene_intro->score = 0;
 	}
 
+	if (button_pressed_sensed == true)
+	{
+		button->body->GetWorld()->DestroyBody(button->body);
+		button = nullptr;
+		button_pressed->body->GetWorld()->DestroyBody(button_pressed->body);
+		button_pressed = nullptr;
+		//TODO: Animation button down
+		button_pressed_sensed = false;
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -757,11 +747,33 @@ update_status ModulePhysics::Update()
 		}
 	}
 
-	if (d_points_sensed == true)
+	if (button_up_sensed == true)
 	{
-		//TODO this must double points not give 500 like now.(to test)
+		//TODO: button animation
+		if (button == nullptr)
+		{
+			int button_points[16] = {
+				240, 149,
+				281, 147,
+				282, 159,
+				276, 159,
+				275, 153,
+				247, 154,
+				247, 160,
+				240, 160
+			};
+			button = CreateStaticRestPolygon(0, 0, button_points, 16, 0);
+
+			int button_press_points[8] = {
+				253, 165,
+				249, 159,
+				272, 157,
+				270, 164
+			};
+			button_pressed = CreatePolygonSensor(0, 0, button_press_points, 8);
+		}
 		App->scene_intro->score += 500;
-		d_points_sensed = false;
+		button_up_sensed = false;
 	}
 
 	if (l_impulse_sensed == true)
@@ -801,7 +813,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius, float res)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -814,6 +826,7 @@ PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
+	fixture.restitution = res;
 
 	b->CreateFixture(&fixture);
 
@@ -933,7 +946,7 @@ PhysBody * ModulePhysics::CreateCircleSensor(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, float res)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -954,6 +967,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+	fixture.restitution = res;
 
 	b->CreateFixture(&fixture);
 
@@ -1178,13 +1192,8 @@ update_status ModulePhysics::PostUpdate()
 	if(!debug)
 		return UPDATE_CONTINUE;
 
-	// Bonus code: this will iterate all objects in the world and draw the circles
-	// You need to provide your own macro to translate meters to pixels
-
-
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
-		//TODO 1-2
 		bool obj_ins_mouse = false;
 		b2Body* b_mouse = b;
 		b2Vec2 mouse_pos;
@@ -1257,7 +1266,6 @@ update_status ModulePhysics::PostUpdate()
 			break;
 			}
 
-			// TODO 1: If mouse button 1 is pressed ...
 			if (obj_ins_mouse == false)
 			{
 				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
@@ -1270,14 +1278,9 @@ update_status ModulePhysics::PostUpdate()
 						break;
 					}
 				}
-				// test if the current body contains mouse position
 			}
 		}
 		b2MouseJointDef def;
-		// If a body was selected we will attach a mouse joint to it
-		// so we can pull it around
-		// TODO 2: If a body was selected, create a mouse joint
-		// using mouse_joint class property
 		if (obj_ins_mouse == true)
 		{
 			
@@ -1291,15 +1294,12 @@ update_status ModulePhysics::PostUpdate()
 			mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
 		}		
 
-		// TODO 3: If the player keeps pressing the mouse button, update
-		// target position and draw a red line between both anchor points
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && mouse_joint)
 		{
 			mouse_joint->SetTarget(mouse_pos);
 			App->renderer->DrawLine(METERS_TO_PIXELS(mouse_pos.x), METERS_TO_PIXELS(mouse_pos.y), METERS_TO_PIXELS(mouse_joint->GetAnchorB().x), METERS_TO_PIXELS(mouse_joint->GetAnchorB().y), 255, 100, 100);
 		}
 
-		// TODO 4: If the player releases the mouse button, destroy the joint
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && mouse_joint)
 		{
 			obj_ins_mouse = false;
@@ -1406,22 +1406,25 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 
 	if (bodyA)
 	{
+		//Lose
 		if (bodyB == lose_sensor)
 		{
 			//App->audio->PlayFx(bonus_fx);
 			lose_sensed = true;
 		}
 
+		//Ball is in start position
 		else if (bodyB == start_sensor)
 		{
 			start_sensed = true;
 		}
 
-		else if (elements_10_p.find(bodyB) != -1)
+		//Elements that gave 100 points
+		else if (elements_100_p.find(bodyB) != -1)
 		{
 			//TODO Add Sound
 			App->scene_intro->score += 100;
-			int i = elements_10_p.find(bodyB);
+			int i = elements_100_p.find(bodyB);
 			if (i == 0 || i == 1)
 			{
 				//pink
@@ -1433,22 +1436,36 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			}
 		}
 
-		else if (bodyB == d_points_sensor)
+		//Lever that pulls the button for double points up
+		else if (bodyB == button_up_sensor)
 		{
-			d_points_sensed = true;
+			button_up_sensed = true;
 		}
 
+		//Left side of the map impulser
 		else if (bodyB == l_impulse_sensor)
 		{
 			l_impulse_sensed = true;
 			start_time = GetTickCount();
 		}
 
+		//Shiny circles around the map
 		else if (shiny_circles.find(bodyB) != -1)
 		{
 			int x, y;
 			bodyB->GetPosition(x, y);
 			//TODO Function for animation
 		}
+
+		//Button pressed
+		if (button_pressed != nullptr)
+		{
+			if (bodyB == button_pressed)
+			{
+				button_pressed_sensed = true;
+				//TODO: animation button up
+			}
+		}
+
 	}
 }

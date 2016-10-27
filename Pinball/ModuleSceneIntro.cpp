@@ -328,7 +328,16 @@ update_status ModuleSceneIntro::Update()
 			shiny_pink_ball = false;
 		}
 	}
-	App->renderer->Blit(shiny_twister_point, 116, 236, &(twister.GetCurrentFrame()));
+	
+	if (twister_b == true)
+	{
+		App->renderer->Blit(shiny_twister_point, 116, 236, &(twister.GetCurrentFrame()));
+		if (twister_end == true)
+		{
+			twister_b = false;
+			twister_end = false;
+		}
+	}
 	App->renderer->Blit(buttons_texture, 235, 126, &(button.GetCurrentFrame()));
 	App->renderer->Blit(yellow_lever, 181, 60, &(yellow_lever_animation.GetCurrentFrame()));
 	return UPDATE_CONTINUE;
@@ -371,7 +380,7 @@ void ModuleSceneIntro::Animations()
 	twister.PushBack({ 204, 0, 34, 34 });
 	twister.PushBack({ 238, 0, 34, 34 });
 	twister.loop = true;
-	twister.speed = 0.1;
+	twister.speed = 0.8f;
 
 	App->scene_intro->shiny_weels_animation.PushBack({ 22, 0, 23, 24 });
 	App->scene_intro->shiny_weels_animation.PushBack({ 46, 0, 23, 24 });

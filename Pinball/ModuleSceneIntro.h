@@ -23,6 +23,8 @@ public:
 	iPoint pos;
 	uint anim_time;
 	bool shiny_pink_ball;
+	bool twister_b;
+	bool twister_end;
 
 
 public:

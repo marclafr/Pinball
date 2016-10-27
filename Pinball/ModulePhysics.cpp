@@ -767,6 +767,7 @@ update_status ModulePhysics::PreUpdate()
 			y = rand() % 100 - 50;
 			b2Vec2 force(x, y);
 			ball->body->ApplyForceToCenter(force, true);
+			App->scene_intro->twister_end = true;
 		}
 	}
 
@@ -823,7 +824,7 @@ update_status ModulePhysics::Update()
 	if (l_impulse_sensed == true)
 	{
 
-		if (GetTickCount() - start_time > 3000)
+		if (GetTickCount() - start_time > 2000)
 		{
 			ball->body->ApplyForceToCenter(b2Vec2(0, -100), true);
 			l_impulse_sensed = false;
@@ -1618,6 +1619,7 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		{
 			rot_time = GetTickCount();
 			rot_ball = true;
+			App->scene_intro->twister_b = true;
 		}
 
 	}

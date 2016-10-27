@@ -30,19 +30,13 @@ public:
 
 
 public:
-	p2List<PhysBody*> circles;
-	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
-
 	uint score;
 	uint record_score;
 
 	PhysBody* sensor;
 	bool sensed;
 
-	SDL_Texture* circle;
-	SDL_Texture* box;
-	SDL_Texture* rick;
+
 	SDL_Texture* background;
 	SDL_Texture* elements;
 	SDL_Texture* buttons_texture;

@@ -48,6 +48,10 @@ public:
 	SDL_Texture* end_screen;
 	SDL_Texture* yellow_lever;
 
+	uint pink_blue_fx;
+	uint levers_fx;
+	bool lever_down_l;
+	bool lever_down_r;
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
@@ -58,6 +62,4 @@ public:
 	Animation shiny_point_animation;
 	Animation twister;
 	Animation yellow_lever_animation;
-	
-
 };

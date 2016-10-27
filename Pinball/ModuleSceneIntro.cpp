@@ -42,8 +42,12 @@ bool ModuleSceneIntro::Start()
 	shiny_weels = App->textures->Load("pinball/shiny_weels.png");
 	end_screen = App->textures->Load("pinball/Game_over.png");
 	yellow_lever = App->textures->Load("pinball/yellow_lever.png");
-
+	pink_blue_fx = App->audio->LoadFx("sounds/pink_blue_sound.wav");
+	levers_fx = App->audio->LoadFx("sounds/Levers_sound.wav");
 	anim_time = GetTickCount();
+
+	lever_down_l = true;
+	lever_down_r = true;
 
 	return ret;
 }
@@ -62,13 +66,27 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->physics->force_makers.getFirst()->data->body->ApplyForceToCenter(b2Vec2(0, -100), true);
 		App->physics->force_makers.getFirst()->next->next->data->body->ApplyForceToCenter(b2Vec2(0, -100), true);
+		if (lever_down_l == true)
+		{
+			App->audio->PlayFx(levers_fx);
+			lever_down_l = false;
+		}
 	}
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP)
+		lever_down_l = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		App->physics->force_makers.getFirst()->next->data->body->ApplyForceToCenter(b2Vec2(0, -100), true);
 		App->physics->force_makers.getLast()->data->body->ApplyForceToCenter(b2Vec2(0, -100), true);
+		if (lever_down_r == true)
+		{
+			App->audio->PlayFx(levers_fx);
+			lever_down_r = false;
+		}
 	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
+		lever_down_r = true;
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{

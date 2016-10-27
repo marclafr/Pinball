@@ -6,6 +6,7 @@
 #include "p2Point.h"
 #include "math.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleAudio.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -1507,17 +1508,12 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			bodyB->GetPosition(x, y);
 			if (i == 0 || i == 1)
 			{
-				//pink
+				//pink (blue doesn't have anim)
 				App->scene_intro->shiny_pink_ball = true;
 				App->scene_intro->pos.x = x;
 				App->scene_intro->pos.y = y;
-				//App->renderer->Blit(App->scene_intro->shiny_weels, 297, 148, &(App->scene_intro->shiny_weels_animation.GetCurrentFrame()));
-
 			}
-			else if (i == 2 || i == 3)
-			{
-				//blue
-			}
+			App->audio->PlayFx(App->scene_intro->pink_blue_fx);
 		}
 
 		//Lever that pulls the button for double points up

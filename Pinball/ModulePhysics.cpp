@@ -737,6 +737,7 @@ update_status ModulePhysics::PreUpdate()
 		if (lives == 0)
 		{
 			App->scene_intro->score = 0;
+			App->audio->PlayFx(App->scene_intro->lose_fx);
 			lives = 4;
 			game_end = true;
 		}
@@ -750,6 +751,7 @@ update_status ModulePhysics::PreUpdate()
 		button_pressed = nullptr;
 		bonus_time = GetTickCount();
 		App->scene_intro->score += 500 * bonus_score;
+		App->audio->PlayFx(App->scene_intro->button_click_fx);
 		button_pressed_sensed = false;
 		button_up_sensed = false;
 	}
@@ -803,7 +805,7 @@ update_status ModulePhysics::Update()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
-		
+		App->audio->PlayFx(App->scene_intro->initial_spring);
 		ball->body->ApplyForceToCenter(b2Vec2(0, -force), true);
 		force = 0;
 		start_sensed = false;

@@ -58,6 +58,9 @@ public:
 	uint twister_fx;
 	uint rest_elem;
 	uint yell_lev_fx;
+	uint lose_fx;
+	uint button_click_fx;
+	uint initial_spring;
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;

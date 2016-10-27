@@ -48,6 +48,9 @@ bool ModuleSceneIntro::Start()
 	twister_fx = App->audio->LoadFx("sounds/Twister_sound.wav");
 	rest_elem = App->audio->LoadFx("sounds/rest_fxs.wav");
 	yell_lev_fx = App->audio->LoadFx("sounds/yellow_lever_fx.wav");
+	lose_fx = App->audio->LoadFx("sounds/Lose_fx.wav");
+	button_click_fx = App->audio->LoadFx("sounds/button_click_fx.wav");
+	initial_spring = App->audio->LoadFx("sounds/initial_spring.wav");
 	anim_time = GetTickCount();
 
 	lever_down_l = true;

@@ -18,13 +18,15 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void Animations();
-	void ShinyAnim();
 	bool shiny_little_ball;
 	iPoint pos;
 	uint anim_time;
 	bool shiny_pink_ball;
 	bool twister_b;
 	bool twister_end;
+	bool yell_lev;
+	uint yell_lev_time;
+
 
 
 public:
@@ -71,6 +73,7 @@ public:
 	Animation shiny_point_animation;
 	Animation twister;
 	Animation yellow_lever_animation;
+	Animation yellow_lever_animation1;
 	Animation hammer_down;
 	Animation hammer_up;
 

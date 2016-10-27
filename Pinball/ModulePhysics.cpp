@@ -1541,32 +1541,15 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		//Lever that pulls the button for double points up
 		else if (bodyB == button_up_sensor && button_up_sensed == true)
 		{
-			App->audio->PlayFx(App->scene_intro->yell_lev_fx);
-			App->scene_intro->yellow_lever_animation.PushBack({ 0, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 56, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 116, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 175, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.loop = false;
-			App->scene_intro->yellow_lever_animation.speed = 0.4f;
-
-			App->scene_intro->yellow_lever_animation.PushBack({ 175, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 116, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 56, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 0, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.loop = false;
-			App->scene_intro->yellow_lever_animation.speed = 0.4f;
+			App->scene_intro->yell_lev = true;
+			App->scene_intro->yell_lev_time = GetTickCount();
 		}
 
 		else if (bodyB == button_up_sensor && button_up_sensed == false)
 		{
 			button_up_sensed = true;
-
-			App->scene_intro->yellow_lever_animation.PushBack({ 0, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 56, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 116, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 175, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.loop = false;
-			App->scene_intro->yellow_lever_animation.speed = 0.4f;
+			App->scene_intro->yell_lev = true;
+			App->scene_intro->yell_lev_time = GetTickCount();
 
 			App->scene_intro->button.PushBack({ 0, 0, 51, 77 });
 			App->scene_intro->button.PushBack({ 51, 0, 51, 77 });
@@ -1583,13 +1566,6 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			App->scene_intro->button.PushBack({ 788, 0, 51, 77 });
 			App->scene_intro->button.loop = false;
 			App->scene_intro->button.speed = 0.4f;
-
-			App->scene_intro->yellow_lever_animation.PushBack({ 175, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 116, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 56, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.PushBack({ 0, 0, 57, 19 });
-			App->scene_intro->yellow_lever_animation.loop = false;
-			App->scene_intro->yellow_lever_animation.speed = 0.4f;
 		}
 		
 

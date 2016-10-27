@@ -52,6 +52,7 @@ bool ModuleSceneIntro::Start()
 	button_click_fx = App->audio->LoadFx("sounds/button_click_fx.wav");
 	initial_spring = App->audio->LoadFx("sounds/initial_spring.wav");
 	anim_time = GetTickCount();
+	yell_lev_time = GetTickCount();
 
 	lever_down_l = true;
 	lever_down_r = true;
@@ -357,8 +358,20 @@ update_status ModuleSceneIntro::Update()
 		App->physics->hammer_up = false;
 	}
 	App->renderer->Blit(buttons_texture, 235, 126, &(button.GetCurrentFrame()));
-	App->renderer->Blit(yellow_lever, 181, 60, &(yellow_lever_animation.GetCurrentFrame()));
-	
+	if (yell_lev == true)
+	{
+		App->renderer->Blit(yellow_lever, 181, 60, &(yellow_lever_animation1.GetCurrentFrame()));
+		
+		if (GetTickCount() - yell_lev_time > 250)
+		{
+			yell_lev_time = GetTickCount();
+			yell_lev = false;
+		}
+	}
+	else
+	{
+		App->renderer->Blit(yellow_lever, 181, 60, &(yellow_lever_animation.GetCurrentFrame()));
+	}
 
 	SDL_Rect hammer_r;
 	hammer_r.w = 28;
@@ -443,9 +456,17 @@ void ModuleSceneIntro::Animations()
 	App->scene_intro->hammer_up.PushBack({ 0, 0, 18, 69 });
 	App->scene_intro->hammer_up.loop = false;
 	App->scene_intro->hammer_up.speed = 5.0f;
-}
 
-void ModuleSceneIntro::ShinyAnim()
-{
-
+	//Button up
+	App->audio->PlayFx(App->scene_intro->yell_lev_fx);
+	App->scene_intro->yellow_lever_animation1.PushBack({ 0, 0, 57, 19 });
+	App->scene_intro->yellow_lever_animation1.PushBack({ 56, 0, 57, 19 });
+	App->scene_intro->yellow_lever_animation1.PushBack({ 116, 0, 57, 19 });
+	App->scene_intro->yellow_lever_animation1.PushBack({ 175, 0, 57, 19 });
+	App->scene_intro->yellow_lever_animation1.PushBack({ 175, 0, 57, 19 });
+	App->scene_intro->yellow_lever_animation1.PushBack({ 116, 0, 57, 19 });
+	App->scene_intro->yellow_lever_animation1.PushBack({ 56, 0, 57, 19 });
+	App->scene_intro->yellow_lever_animation1.PushBack({ 0, 0, 57, 19 });
+	App->scene_intro->yellow_lever_animation1.loop = true;
+	App->scene_intro->yellow_lever_animation1.speed = 0.4f;
 }

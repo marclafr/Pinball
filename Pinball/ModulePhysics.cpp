@@ -35,6 +35,9 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 	
+	lives = 4;
+	game_end = false;
+
 	CreateMap();
 	CreateSensors();
 	CreateLevers();
@@ -721,8 +724,14 @@ update_status ModulePhysics::PreUpdate()
 		{
 			App->scene_intro->record_score = App->scene_intro->score;
 		}
-		App->scene_intro->score = 0;
 		bonus_time += 30000; //ends the bonus points as soon as the new game starts
+		lives--;
+		if (lives == 0)
+		{
+			App->scene_intro->score = 0;
+			lives = 4;
+			game_end = true;
+		}
 	}
 
 	if (button_pressed_sensed == true)
@@ -1498,7 +1507,8 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			if (i == 0 || i == 1)
 			{
 				//pink
-				App->renderer->Blit(App->scene_intro->shiny_weels, 297, 148, &(App->scene_intro->shiny_weels_animation.GetCurrentFrame()));
+				App->scene_intro->ShinyAnim();
+				//App->renderer->Blit(App->scene_intro->shiny_weels, 297, 148, &(App->scene_intro->shiny_weels_animation.GetCurrentFrame()));
 
 			}
 			else if (i == 2 || i == 3)
@@ -1511,6 +1521,21 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		else if (bodyB == button_up_sensor)
 		{
 			button_up_sensed = true;
+
+			App->scene_intro->button.PushBack({ 51, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 111, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 180, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 251, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 319, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 393, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 457, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 524, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 586, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 654, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 720, 0, 51, 77 });
+			App->scene_intro->button.PushBack({ 788, 0, 51, 77 });
+			App->scene_intro->button.loop = false;
+			App->scene_intro->button.speed = 0.1f;
 		}
 
 		//Left side of the map impulser
@@ -1535,7 +1560,6 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			if (bodyB == button_pressed)
 			{
 				button_pressed_sensed = true;
-				//TODO: animation button up
 			}
 		}
 

@@ -40,7 +40,7 @@ bool ModuleSceneIntro::Start()
 	shiny_points = App->textures->Load("pinball/shiny_points.png");
 	shiny_twister_point = App->textures->Load("pinball/shiny_twister_point.png");
 	shiny_weels = App->textures->Load("pinball/shiny_weels.png");
-
+	end_screen = App->textures->Load("pinball/Game_over.png");
 
 	return ret;
 }
@@ -278,6 +278,16 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(buttons_texture, 235, 126, &(button.GetCurrentFrame()));
 	
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->physics->game_end == true)
+	{
+		App->physics->game_end = false;
+	}
+
+	if (App->physics->game_end == true)
+	{
+		App->renderer->Blit(end_screen, 0, 167, NULL, 1.0f, 0);
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -295,22 +305,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 void ModuleSceneIntro::Animations()
 {
-	
-	button.PushBack({ 51, 0, 51, 77 });
-	button.PushBack({ 111, 0, 51, 77 });
-	button.PushBack({ 180, 0, 51, 77 });
-	button.PushBack({ 251, 0, 51, 77 });
-	button.PushBack({ 319, 0, 51, 77 });
-	button.PushBack({ 393, 0, 51, 77 });
-	button.PushBack({ 457, 0, 51, 77 });
-	button.PushBack({ 524, 0, 51, 77 });
-	button.PushBack({ 586, 0, 51, 77 });
-	button.PushBack({ 654, 0, 51, 77 });
-	button.PushBack({ 720, 0, 51, 77 });
-	button.PushBack({ 788, 0, 51, 77 });
-	button.loop = false;
-	button.speed = 0.1f;
-
 	shiny_weels_animation.PushBack({ 22, 0, 23, 24 });
 	shiny_weels_animation.PushBack({ 46, 0, 23, 24 });
 	shiny_weels_animation.PushBack({ 71, 0, 23, 24 });
@@ -320,4 +314,16 @@ void ModuleSceneIntro::Animations()
 	shiny_weels_animation.speed = 0.5f;
 	//button_animation = &button;
 	//App->renderer->Blit(buttons_texture, 0 , 0 , &(current_animation->GetCurrentFrame()));
+}
+
+void ModuleSceneIntro::ShinyAnim()
+{
+	App->scene_intro->shiny_weels_animation.PushBack({ 22, 0, 23, 24 });
+	App->scene_intro->shiny_weels_animation.PushBack({ 46, 0, 23, 24 });
+	App->scene_intro->shiny_weels_animation.PushBack({ 71, 0, 23, 24 });
+	App->scene_intro->shiny_weels_animation.PushBack({ 95, 0, 23, 24 });
+	//shiny_weels_animation.PushBack({ 120, 0, 23, 24 });
+	App->scene_intro->shiny_weels_animation.loop = false;
+	App->scene_intro->shiny_weels_animation.speed = 0.5f;
+	App->renderer->Blit(shiny_weels, 297, 148, &(shiny_weels_animation.GetCurrentFrame()));
 }

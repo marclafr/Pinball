@@ -77,6 +77,7 @@ public:
 
 	p2List<PhysBody*> force_makers;
 	p2List<PhysBody*> red_wheels;
+	bool game_end;
 
 private:
 
@@ -111,4 +112,6 @@ private:
 
 	uint bonus_time;
 	uint bonus_score;
+
+	uint lives;
 };

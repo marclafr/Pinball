@@ -39,6 +39,7 @@ public:
 	SDL_Texture* shiny_points;
 	SDL_Texture* shiny_twister_point;
 	SDL_Texture* shiny_weels;
+	SDL_Texture* end_screen;
 
 	uint bonus_fx;
 	p2Point<int> ray;
@@ -48,4 +49,6 @@ public:
 	//Animation* button_animation = nullptr;
 	Animation button;
 	Animation shiny_weels_animation;
+
+	void ShinyAnim();
 };

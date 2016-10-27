@@ -91,9 +91,6 @@ private:
 	void CreateScrewers();
 	void CreateLeverForceMakers();
 
-	PhysBody* spring_base;
-	PhysBody* spring_impulser;
-
 	p2List<PhysBody*> elements_100_p;
 	p2List<PhysBody*> restit_bodies;
 	p2List<PhysBody*> screwers;
@@ -109,7 +106,6 @@ private:
 	bool joint_created;
 	bool CreateTemporaryJoint();
 	void DeleteTemporaryJoint();
-	b2DistanceJointDef* CreateLineJoint(b2Body* bodyA, b2Body* bodyB, b2Vec2 Local_Anchor_A, b2Vec2 Local_Anchor_B, float frequency, float damping);
 	
 	uint start_time;
 

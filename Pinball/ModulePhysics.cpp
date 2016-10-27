@@ -57,12 +57,6 @@ void ModulePhysics::CreateMap()
 	ball->body->IsBullet();
 	ball->listener = this;
 
-	//starting impulsor
-	spring_base = CreateRectangle(367, 400, 7, 10, b2_staticBody);
-	spring_impulser = CreateRectangle(364, 361, 10, 50, b2_dynamicBody);
-	CreateLineJoint(spring_impulser->body, spring_base->body, b2Vec2(0, 0), b2Vec2(0, 0), 1.0f, 0.0f);
-
-
 	//Contorn
 	int pinball_contorn[306] = {
 	141, 599,
@@ -604,7 +598,7 @@ void ModulePhysics::CreateMap()
 
 void ModulePhysics::CreateSensors()
 {
-	start_sensor = CreateRectangleSensor(365, 325, 15, 20);
+	start_sensor = CreateRectangleSensor(365, 335, 7, 23);
 	lose_sensor = CreateRectangleSensor(190, 630, 300, 50);
 
 	l_impulse_sensor = CreateRectangleSensor(18, 366, 26, 26);
@@ -771,19 +765,20 @@ update_status ModulePhysics::PreUpdate()
 update_status ModulePhysics::Update()
 {
 	//IMPULSING THE BALL
-	static float force = +500;
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	static float force = 10;
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
 		if (start_sensed == true)
 		{
 			//TODO: Modify values/map in order to get correct functionality
-			if (force < 5000)
-			force += 50;
+			if (force < 100)
+			force += 10;
 		}
 	}
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
-		spring_impulser->body->ApplyForceToCenter(b2Vec2 (0, -force), true);
+		ball->body->ApplyForceToCenter(b2Vec2(0, -force), true);
+		force = 0;
 		start_sensed = false;
 	}
 
@@ -1258,19 +1253,6 @@ void ModulePhysics::DeleteTemporaryJoint()
 	temp_rev_joint = nullptr;
 }
 
-b2DistanceJointDef* ModulePhysics::CreateLineJoint(b2Body * bodyA, b2Body * bodyB, b2Vec2 Local_Anchor_A, b2Vec2 Local_Anchor_B, float frequency, float damping)
-{
-	b2DistanceJointDef DistanceJoinDef;
-	DistanceJoinDef.bodyA = bodyA;
-	DistanceJoinDef.bodyB = bodyB;
-	DistanceJoinDef.localAnchorA.Set(PIXEL_TO_METERS(Local_Anchor_A.x), PIXEL_TO_METERS(Local_Anchor_A.y));
-	DistanceJoinDef.localAnchorB.Set(PIXEL_TO_METERS(Local_Anchor_B.x), PIXEL_TO_METERS(Local_Anchor_B.y));
-	DistanceJoinDef.dampingRatio = damping;
-	DistanceJoinDef.frequencyHz = frequency;
-	b2DistanceJointDef* dis_joint = (b2DistanceJointDef*)world->CreateJoint(&DistanceJoinDef);
-	return dis_joint;
-}
-
 // 
 update_status ModulePhysics::PostUpdate()
 {
@@ -1360,7 +1342,7 @@ update_status ModulePhysics::PostUpdate()
 				{
 					mouse_pos.x = PIXEL_TO_METERS(App->input->GetMouseX());
 					mouse_pos.y = PIXEL_TO_METERS(App->input->GetMouseY());
-					if (f->TestPoint(mouse_pos))
+					if (f->TestPoint(mouse_pos) && f->GetType() == b2Shape::e_circle)
 					{
 						obj_ins_mouse = true;
 						break;

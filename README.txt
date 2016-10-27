@@ -9,9 +9,23 @@ And We did a new version of this Vimto's pinball:
 
 CONTROLS:
 
--Space: Launch Ball.
+-Down arrow: Launch Ball.
 -Left/Right arrow: move left/right arrows.
+
 -F1: Show collision grids.
+
+
+GODMODE:
+
+- If the colliders are showed (with F1 key) you can move the ball with your mouse by clicking in it, if you stop clicking the ball will return to its normal state.
+
+
+LOSE CONDITION:
+
+- Your ball falls 4 times.
+
+There is no win condition, just get the maximum amount of points you can!
+
 
 Our version won't have the following elements respect to the original:
 

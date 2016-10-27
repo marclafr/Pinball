@@ -741,8 +741,9 @@ update_status ModulePhysics::PreUpdate()
 		button_pressed->body->GetWorld()->DestroyBody(button_pressed->body);
 		button_pressed = nullptr;
 		bonus_time = GetTickCount();
-		//TODO: Animation button down
+		App->scene_intro->score += 500 * bonus_score;
 		button_pressed_sensed = false;
+		button_up_sensed = false;
 	}
 
 	if (rot_ball == true)
@@ -816,8 +817,6 @@ update_status ModulePhysics::Update()
 			};
 			button_pressed = CreatePolygonSensor(0, 0, button_press_points, 8);
 		}
-		App->scene_intro->score += 500 * bonus_score;
-		button_up_sensed = false;
 	}
 
 	if (l_impulse_sensed == true)
@@ -1504,10 +1503,14 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			//TODO Add Sound
 			App->scene_intro->score += 100 * bonus_score;
 			int i = elements_100_p.find(bodyB);
+			int x, y;
+			bodyB->GetPosition(x, y);
 			if (i == 0 || i == 1)
 			{
 				//pink
-				App->scene_intro->ShinyAnim();
+				App->scene_intro->shiny_pink_ball = true;
+				App->scene_intro->pos.x = x;
+				App->scene_intro->pos.y = y;
 				//App->renderer->Blit(App->scene_intro->shiny_weels, 297, 148, &(App->scene_intro->shiny_weels_animation.GetCurrentFrame()));
 
 			}
@@ -1518,7 +1521,7 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		}
 
 		//Lever that pulls the button for double points up
-		else if (bodyB == button_up_sensor)
+		else if (bodyB == button_up_sensor && button_up_sensed == false)
 		{
 			button_up_sensed = true;
 
@@ -1551,7 +1554,10 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			int x, y;
 			bodyB->GetPosition(x, y);
 			App->scene_intro->score += 25 * bonus_score;
-			//TODO Function for animation
+			App->scene_intro->shiny_little_ball = true;
+			App->scene_intro->anim_time = GetTickCount();
+			App->scene_intro->pos.x = x;
+			App->scene_intro->pos.y = y;
 		}
 
 		//Button pressed

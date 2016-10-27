@@ -42,6 +42,8 @@ bool ModuleSceneIntro::Start()
 	shiny_weels = App->textures->Load("pinball/shiny_weels.png");
 	end_screen = App->textures->Load("pinball/Game_over.png");
 
+	anim_time = GetTickCount();
+
 	return ret;
 }
 
@@ -289,7 +291,24 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(end_screen, 0, 167, NULL, 1.0f, 0);
 	}
 
-	App->renderer->Blit(shiny_points, 300, 49, &(shiny_point_animation.GetCurrentFrame()));
+	if (shiny_little_ball == true)
+	{
+		App->renderer->Blit(shiny_points, pos.x, pos.y, &(shiny_point_animation.GetCurrentFrame()));
+		if (GetTickCount() - anim_time > 150)
+		{
+			anim_time = GetTickCount();
+			shiny_little_ball = false;
+		}
+	}
+
+	if (shiny_pink_ball == true)
+	{
+		App->renderer->Blit(shiny_weels, pos.x, pos.y, &(shiny_weels_animation.GetCurrentFrame()));
+		if (shiny_weels_animation.Finished() == true)
+		{
+			shiny_pink_ball = false;
+		}
+	}
 	App->renderer->Blit(shiny_twister_point, 116, 236, &(twister.GetCurrentFrame()));
 	return UPDATE_CONTINUE;
 }
@@ -320,7 +339,7 @@ void ModuleSceneIntro::Animations()
 	shiny_point_animation.PushBack({ 15, 0, 8, 8 });
 	shiny_point_animation.PushBack({ 24, 0, 8, 8 });
 	shiny_point_animation.loop = true;
-	shiny_point_animation.speed = 0.5;
+	shiny_point_animation.speed = 0.3;
 
 	twister.PushBack({ 0, 0, 34, 34 });
 	twister.PushBack({ 34, 0, 34, 34 });
@@ -332,16 +351,16 @@ void ModuleSceneIntro::Animations()
 	twister.PushBack({ 238, 0, 34, 34 });
 	twister.loop = true;
 	twister.speed = 0.1;
-}
 
-void ModuleSceneIntro::ShinyAnim()
-{
 	App->scene_intro->shiny_weels_animation.PushBack({ 22, 0, 23, 24 });
 	App->scene_intro->shiny_weels_animation.PushBack({ 46, 0, 23, 24 });
 	App->scene_intro->shiny_weels_animation.PushBack({ 71, 0, 23, 24 });
 	App->scene_intro->shiny_weels_animation.PushBack({ 95, 0, 23, 24 });
-	//shiny_weels_animation.PushBack({ 120, 0, 23, 24 });
 	App->scene_intro->shiny_weels_animation.loop = false;
 	App->scene_intro->shiny_weels_animation.speed = 0.5f;
-	App->renderer->Blit(shiny_weels, 297, 148, &(shiny_weels_animation.GetCurrentFrame()));
+}
+
+void ModuleSceneIntro::ShinyAnim()
+{
+
 }

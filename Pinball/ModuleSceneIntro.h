@@ -19,6 +19,11 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void Animations();
 	void ShinyAnim();
+	bool shiny_little_ball;
+	iPoint pos;
+	uint anim_time;
+	bool shiny_pink_ball;
+
 
 public:
 	p2List<PhysBody*> circles;

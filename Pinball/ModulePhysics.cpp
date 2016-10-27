@@ -780,18 +780,26 @@ update_status ModulePhysics::Update()
 	static float force = 10;
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
+		if (hammer_down == false)
+		{
+			hammer_down = true;
+		}
 		if (start_sensed == true)
 		{
-			//TODO: Modify values/map in order to get correct functionality
 			if (force < 100)
-			force += 10;
+			{
+				force += 10;
+			}
+			
 		}
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
+		
 		ball->body->ApplyForceToCenter(b2Vec2(0, -force), true);
 		force = 0;
 		start_sensed = false;
+		hammer_up = true;
 	}
 
 	if (button_up_sensed == true)

@@ -36,6 +36,7 @@ bool ModuleSceneIntro::Start()
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	elements = App->textures->Load("pinball/pinball_elements.png");
+	hammer_texture = App->textures->Load("pinball/hammers.png");
 	buttons_texture = App->textures->Load("pinball/button.png");
 	shiny_points = App->textures->Load("pinball/shiny_points.png");
 	shiny_twister_point = App->textures->Load("pinball/shiny_twister_point.png");
@@ -338,8 +339,27 @@ update_status ModuleSceneIntro::Update()
 			twister_end = false;
 		}
 	}
+	if (App->physics->hammer_down == true)
+	{
+		App->renderer->Blit(hammer_texture, 358, 330, &(hammer_down.GetCurrentFrame()));
+		App->physics->hammer_down = false;
+	}
+
+	if (App->physics->hammer_up == true)
+	{
+		App->renderer->Blit(hammer_texture, 358, 330, &(hammer_up.GetCurrentFrame()));
+		App->physics->hammer_up = false;
+	}
 	App->renderer->Blit(buttons_texture, 235, 126, &(button.GetCurrentFrame()));
 	App->renderer->Blit(yellow_lever, 181, 60, &(yellow_lever_animation.GetCurrentFrame()));
+	
+
+	SDL_Rect hammer_r;
+	hammer_r.w = 28;
+	hammer_r.h = 69;
+	hammer_r.x = 210;
+	hammer_r.y = 0;
+	App->renderer->Blit(elements, 352, 390, &hammer_r);
 	return UPDATE_CONTINUE;
 }
 
@@ -392,6 +412,31 @@ void ModuleSceneIntro::Animations()
 	App->scene_intro->yellow_lever_animation.PushBack({ 0, 0, 57, 19 });
 	App->scene_intro->yellow_lever_animation.loop = false;
 	App->scene_intro->yellow_lever_animation.speed = 0.4f;
+
+	App->scene_intro->hammer_down.PushBack({ 0, 0, 18, 69 });
+	App->scene_intro->hammer_down.PushBack({ 18, 0, 18, 69 });
+	App->scene_intro->hammer_down.PushBack({ 36, 0, 18, 69 });
+	App->scene_intro->hammer_down.PushBack({ 54, 0, 18, 69 });
+	App->scene_intro->hammer_down.PushBack({ 72, 0, 18, 69 });
+	App->scene_intro->hammer_down.PushBack({ 90, 0, 18, 69 });
+	App->scene_intro->hammer_down.PushBack({ 108, 0, 18, 69 });
+	App->scene_intro->hammer_down.PushBack({ 126, 0, 18, 69 });
+	App->scene_intro->hammer_down.PushBack({ 145, 0, 18, 69 });
+	App->scene_intro->hammer_down.loop = false;
+	App->scene_intro->hammer_down.speed = 0.4f;
+	
+
+	App->scene_intro->hammer_up.PushBack({ 145, 0, 18, 69 });
+	App->scene_intro->hammer_up.PushBack({ 126, 0, 18, 69 });
+	App->scene_intro->hammer_up.PushBack({ 108, 0, 18, 69 });
+	App->scene_intro->hammer_up.PushBack({ 90, 0, 18, 69 });
+	App->scene_intro->hammer_up.PushBack({ 72, 0, 18, 69 });
+	App->scene_intro->hammer_up.PushBack({ 54, 0, 18, 69 });
+	App->scene_intro->hammer_up.PushBack({ 36, 0, 18, 69 });
+	App->scene_intro->hammer_up.PushBack({ 18, 0, 18, 69 });
+	App->scene_intro->hammer_up.PushBack({ 0, 0, 18, 69 });
+	App->scene_intro->hammer_up.loop = false;
+	App->scene_intro->hammer_up.speed = 5.0f;
 }
 
 void ModuleSceneIntro::ShinyAnim()

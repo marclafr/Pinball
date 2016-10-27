@@ -74,6 +74,8 @@ public:
 	bool l_impulse_sensed;
 	p2List<PhysBody*> shiny_circles;
 	p2List<bool> shiny_circles_sensed;
+	bool hammer_down = false;
+	bool hammer_up = false;
 
 	p2List<PhysBody*> force_makers;
 	p2List<PhysBody*> red_wheels;

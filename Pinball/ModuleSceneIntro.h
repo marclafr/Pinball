@@ -49,6 +49,7 @@ public:
 	SDL_Texture* shiny_weels;
 	SDL_Texture* end_screen;
 	SDL_Texture* yellow_lever;
+	SDL_Texture* hammer_texture;
 
 	uint pink_blue_fx;
 	uint levers_fx;
@@ -64,4 +65,7 @@ public:
 	Animation shiny_point_animation;
 	Animation twister;
 	Animation yellow_lever_animation;
+	Animation hammer_down;
+	Animation hammer_up;
+
 };

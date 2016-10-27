@@ -752,7 +752,7 @@ update_status ModulePhysics::PreUpdate()
 		bonus_time = GetTickCount();
 		App->scene_intro->score += 500 * bonus_score;
 		App->audio->PlayFx(App->scene_intro->button_click_fx);
-		button_pressed_sensed = false;
+		App->scene_intro->button_down.Reset();
 		button_up_sensed = false;
 	}
 
@@ -1508,7 +1508,6 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		//Lose
 		if (bodyB == lose_sensor)
 		{
-			//App->audio->PlayFx(bonus_fx);
 			lose_sensed = true;
 		}
 
@@ -1544,6 +1543,8 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 		{
 			App->scene_intro->yell_lev = true;
 			App->scene_intro->yell_lev_time = GetTickCount();
+			App->audio->PlayFx(App->scene_intro->yell_lev_fx);
+
 		}
 
 		else if (bodyB == button_up_sensor && button_up_sensed == false)
@@ -1551,22 +1552,7 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			button_up_sensed = true;
 			App->scene_intro->yell_lev = true;
 			App->scene_intro->yell_lev_time = GetTickCount();
-
-			App->scene_intro->button.PushBack({ 0, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 51, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 111, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 180, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 251, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 319, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 393, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 457, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 524, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 586, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 654, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 720, 0, 51, 77 });
-			App->scene_intro->button.PushBack({ 788, 0, 51, 77 });
-			App->scene_intro->button.loop = false;
-			App->scene_intro->button.speed = 0.4f;
+			App->audio->PlayFx(App->scene_intro->yell_lev_fx);			
 		}
 		
 
@@ -1595,21 +1581,6 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			if (bodyB == button_pressed)
 			{
 				button_pressed_sensed = true;
-				App->scene_intro->button.PushBack({ 788, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 720, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 654, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 586, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 524, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 457, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 393, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 319, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 251, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 180, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 111, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 51, 0, 51, 77 });
-				App->scene_intro->button.PushBack({ 0, 0, 51, 77 });
-				App->scene_intro->button.loop = false;
-				App->scene_intro->button.speed = 0.5f;
 			}
 		}
 

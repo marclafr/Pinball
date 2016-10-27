@@ -80,6 +80,7 @@ public:
 	p2List<PhysBody*> force_makers;
 	p2List<PhysBody*> red_wheels;
 	bool game_end;
+	bool button_pressed_sensed;
 
 private:
 
@@ -100,7 +101,7 @@ private:
 
 	PhysBody* button;
 	PhysBody* button_pressed;
-	bool button_pressed_sensed;
+
 	
 	PhysBody* rot_circle;
 	uint rot_time;

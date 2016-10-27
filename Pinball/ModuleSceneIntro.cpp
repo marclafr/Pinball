@@ -34,7 +34,6 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	background = App->textures->Load("pinball/background.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	elements = App->textures->Load("pinball/pinball_elements.png");
 	hammer_texture = App->textures->Load("pinball/hammers.png");
 	buttons_texture = App->textures->Load("pinball/button.png");
@@ -95,65 +94,6 @@ update_status ModuleSceneIntro::Update()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 		lever_down_r = true;
-
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		//ray_on = !ray_on;
-		//ray.x = App->input->GetMouseX();
-		//ray.y = App->input->GetMouseY();
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
-		circles.getLast()->data->listener = this;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		//boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
-
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64, 0));
-	}
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -305,8 +245,16 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	App->renderer->Blit(buttons_texture, 235, 126, &(button.GetCurrentFrame()));
-	
+	if (App->physics->button_up_sensed == true)
+	{
+		App->renderer->Blit(buttons_texture, 235, 126, &(button_up.GetCurrentFrame()));
+	}
+	if (App->physics->button_pressed_sensed == true)
+	{
+		App->renderer->Blit(buttons_texture, 235, 126, &(button_down.GetCurrentFrame()));
+		button_up.Reset();
+		App->physics->button_pressed_sensed = false;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->physics->game_end == true)
 	{
@@ -375,7 +323,6 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(hammer_texture, 358, 330);
 	}
 
-	App->renderer->Blit(buttons_texture, 235, 126, &(button.GetCurrentFrame()));
 	if (yell_lev == true)
 	{
 		App->renderer->Blit(yellow_lever, 181, 60, &(yellow_lever_animation1.GetCurrentFrame()));
@@ -394,16 +341,7 @@ update_status ModuleSceneIntro::Update()
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
-{
-	int x, y;
-
-
-	if (bodyA)
-	{
-		//if(bodyB == lose_sensor)
-		App->audio->PlayFx(bonus_fx);
-	}
-}
+{}
 
 void ModuleSceneIntro::Animations()
 {
@@ -432,52 +370,82 @@ void ModuleSceneIntro::Animations()
 	twister.loop = true;
 	twister.speed = 0.8f;
 
-	App->scene_intro->shiny_weels_animation.PushBack({ 22, 0, 23, 24 });
-	App->scene_intro->shiny_weels_animation.PushBack({ 46, 0, 23, 24 });
-	App->scene_intro->shiny_weels_animation.PushBack({ 71, 0, 23, 24 });
-	App->scene_intro->shiny_weels_animation.PushBack({ 95, 0, 23, 24 });
-	App->scene_intro->shiny_weels_animation.loop = false;
-	App->scene_intro->shiny_weels_animation.speed = 0.5f;
+	shiny_weels_animation.PushBack({ 22, 0, 23, 24 });
+	shiny_weels_animation.PushBack({ 46, 0, 23, 24 });
+	shiny_weels_animation.PushBack({ 71, 0, 23, 24 });
+	shiny_weels_animation.PushBack({ 95, 0, 23, 24 });
+	shiny_weels_animation.loop = false;
+	shiny_weels_animation.speed = 0.5f;
 
-	App->scene_intro->yellow_lever_animation.PushBack({ 0, 0, 57, 19 });
-	App->scene_intro->yellow_lever_animation.loop = false;
-	App->scene_intro->yellow_lever_animation.speed = 0.4f;
+	yellow_lever_animation.PushBack({ 0, 0, 57, 19 });
+	yellow_lever_animation.loop = false;
+	yellow_lever_animation.speed = 0.4f;
 
-	App->scene_intro->hammer_down.PushBack({ 0, 0, 18, 69 });
-	App->scene_intro->hammer_down.PushBack({ 18, 0, 18, 69 });
-	App->scene_intro->hammer_down.PushBack({ 36, 0, 18, 69 });
-	App->scene_intro->hammer_down.PushBack({ 54, 0, 18, 69 });
-	App->scene_intro->hammer_down.PushBack({ 72, 0, 18, 69 });
-	App->scene_intro->hammer_down.PushBack({ 90, 0, 18, 69 });
-	App->scene_intro->hammer_down.PushBack({ 108, 0, 18, 69 });
-	App->scene_intro->hammer_down.PushBack({ 126, 0, 18, 69 });
-	App->scene_intro->hammer_down.PushBack({ 145, 0, 18, 69 });
-	App->scene_intro->hammer_down.loop = true;
-	App->scene_intro->hammer_down.speed = 0.4f;
+	hammer_down.PushBack({ 0, 0, 18, 69 });
+	hammer_down.PushBack({ 18, 0, 18, 69 });
+	hammer_down.PushBack({ 36, 0, 18, 69 });
+	hammer_down.PushBack({ 54, 0, 18, 69 });
+	hammer_down.PushBack({ 72, 0, 18, 69 });
+	hammer_down.PushBack({ 90, 0, 18, 69 });
+	hammer_down.PushBack({ 108, 0, 18, 69 });
+	hammer_down.PushBack({ 126, 0, 18, 69 });
+	hammer_down.PushBack({ 145, 0, 18, 69 });
+	hammer_down.loop = true;
+	hammer_down.speed = 0.4f;
 	
 
-	App->scene_intro->hammer_up.PushBack({ 145, 0, 18, 69 });
-	App->scene_intro->hammer_up.PushBack({ 126, 0, 18, 69 });
-	App->scene_intro->hammer_up.PushBack({ 108, 0, 18, 69 });
-	App->scene_intro->hammer_up.PushBack({ 90, 0, 18, 69 });
-	App->scene_intro->hammer_up.PushBack({ 72, 0, 18, 69 });
-	App->scene_intro->hammer_up.PushBack({ 54, 0, 18, 69 });
-	App->scene_intro->hammer_up.PushBack({ 36, 0, 18, 69 });
-	App->scene_intro->hammer_up.PushBack({ 18, 0, 18, 69 });
-	App->scene_intro->hammer_up.PushBack({ 0, 0, 18, 69 });
-	App->scene_intro->hammer_up.loop = true;
-	App->scene_intro->hammer_up.speed = 5.0f;
+	hammer_up.PushBack({ 145, 0, 18, 69 });
+	hammer_up.PushBack({ 126, 0, 18, 69 });
+	hammer_up.PushBack({ 108, 0, 18, 69 });
+	hammer_up.PushBack({ 90, 0, 18, 69 });
+	hammer_up.PushBack({ 72, 0, 18, 69 });
+	hammer_up.PushBack({ 54, 0, 18, 69 });
+	hammer_up.PushBack({ 36, 0, 18, 69 });
+	hammer_up.PushBack({ 18, 0, 18, 69 });
+	hammer_up.PushBack({ 0, 0, 18, 69 });
+	hammer_up.loop = true;
+	hammer_up.speed = 5.0f;
 
-	//Button up
-	App->audio->PlayFx(App->scene_intro->yell_lev_fx);
-	App->scene_intro->yellow_lever_animation1.PushBack({ 0, 0, 57, 19 });
-	App->scene_intro->yellow_lever_animation1.PushBack({ 56, 0, 57, 19 });
-	App->scene_intro->yellow_lever_animation1.PushBack({ 116, 0, 57, 19 });
-	App->scene_intro->yellow_lever_animation1.PushBack({ 175, 0, 57, 19 });
-	App->scene_intro->yellow_lever_animation1.PushBack({ 175, 0, 57, 19 });
-	App->scene_intro->yellow_lever_animation1.PushBack({ 116, 0, 57, 19 });
-	App->scene_intro->yellow_lever_animation1.PushBack({ 56, 0, 57, 19 });
-	App->scene_intro->yellow_lever_animation1.PushBack({ 0, 0, 57, 19 });
-	App->scene_intro->yellow_lever_animation1.loop = true;
-	App->scene_intro->yellow_lever_animation1.speed = 0.4f;
+	yellow_lever_animation1.PushBack({ 0, 0, 57, 19 });
+	yellow_lever_animation1.PushBack({ 56, 0, 57, 19 });
+	yellow_lever_animation1.PushBack({ 116, 0, 57, 19 });
+	yellow_lever_animation1.PushBack({ 175, 0, 57, 19 });
+	yellow_lever_animation1.PushBack({ 175, 0, 57, 19 });
+	yellow_lever_animation1.PushBack({ 116, 0, 57, 19 });
+	yellow_lever_animation1.PushBack({ 56, 0, 57, 19 });
+	yellow_lever_animation1.PushBack({ 0, 0, 57, 19 });
+	yellow_lever_animation1.loop = true;
+	yellow_lever_animation1.speed = 0.4f;
+
+	button_up.PushBack({ 0, 0, 51, 77 });
+	button_up.PushBack({ 51, 0, 51, 77 });
+	button_up.PushBack({ 111, 0, 51, 77 });
+	button_up.PushBack({ 180, 0, 51, 77 });
+	button_up.PushBack({ 251, 0, 51, 77 });
+	button_up.PushBack({ 319, 0, 51, 77 });
+	button_up.PushBack({ 393, 0, 51, 77 });
+	button_up.PushBack({ 457, 0, 51, 77 });
+	button_up.PushBack({ 524, 0, 51, 77 });
+	button_up.PushBack({ 586, 0, 51, 77 });
+	button_up.PushBack({ 654, 0, 51, 77 });
+	button_up.PushBack({ 720, 0, 51, 77 });
+	button_up.PushBack({ 788, 0, 51, 77 });
+	button_up.loop = false;
+	button_up.speed = 0.4f;
+
+	App->scene_intro->button_down.PushBack({ 788, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 720, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 654, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 586, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 524, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 457, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 393, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 319, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 251, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 180, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 111, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 51, 0, 51, 77 });
+	App->scene_intro->button_down.PushBack({ 0, 0, 51, 77 });
+	App->scene_intro->button_down.loop = false;
+	App->scene_intro->button_down.speed = 0.5f;
 }

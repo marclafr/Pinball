@@ -63,12 +63,12 @@ public:
 	uint lose_fx;
 	uint button_click_fx;
 	uint initial_spring;
-	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
 
 	//Animations
-	Animation button;
+	Animation button_up;
+	Animation button_down;
 	Animation shiny_weels_animation;
 	Animation shiny_point_animation;
 	Animation twister;

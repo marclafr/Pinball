@@ -45,6 +45,9 @@ bool ModuleSceneIntro::Start()
 	yellow_lever = App->textures->Load("pinball/yellow_lever.png");
 	pink_blue_fx = App->audio->LoadFx("sounds/pink_blue_sound.wav");
 	levers_fx = App->audio->LoadFx("sounds/Levers_sound.wav");
+	twister_fx = App->audio->LoadFx("sounds/Twister_sound.wav");
+	rest_elem = App->audio->LoadFx("sounds/rest_fxs.wav");
+	yell_lev_fx = App->audio->LoadFx("sounds/yellow_lever_fx.wav");
 	anim_time = GetTickCount();
 
 	lever_down_l = true;

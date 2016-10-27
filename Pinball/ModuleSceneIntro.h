@@ -55,6 +55,9 @@ public:
 	uint levers_fx;
 	bool lever_down_l;
 	bool lever_down_r;
+	uint twister_fx;
+	uint rest_elem;
+	uint yell_lev_fx;
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;

@@ -49,7 +49,7 @@ bool ModulePhysics::Start()
 
 	start_time = GetTickCount();
 	bonus_time = GetTickCount() + 30000;
-	rot_time = GetTickCount() + 4000;
+	rot_time = GetTickCount() + 3000;
 
 	return true;
 }
@@ -680,6 +680,13 @@ void ModulePhysics::CreateLevers()
 	levers.add(CreatePolygon(0, 0, top_right_lever, 12));
 	levers.add(CreatePolygon(0, 0, bot_left_lever, 16));
 	levers.add(CreatePolygon(0, 0, bot_right_lever, 12));
+
+	p2List_item<PhysBody*>* item = levers.getFirst();
+	while (item != NULL)
+	{
+		item->data->body->IsBullet();
+		item = item->next;
+	}
 }
 
 void ModulePhysics::CreateScrewers()
@@ -752,12 +759,13 @@ update_status ModulePhysics::PreUpdate()
 		if (joint_created == false)
 		{
 			joint_created = CreateTemporaryJoint();
+			App->audio->PlayFx(App->scene_intro->twister_fx);
 		}
 		else
 		{
 			App->scene_intro->score += 1;
 		}
-		if (GetTickCount() - rot_time > 3000)
+		if (GetTickCount() - rot_time > 2000)
 		{
 			DeleteTemporaryJoint();
 			joint_created = false;
@@ -1522,12 +1530,16 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 				App->scene_intro->pos.x = x;
 				App->scene_intro->pos.y = y;
 			}
-			App->audio->PlayFx(App->scene_intro->pink_blue_fx);
+			if (i < 4)
+				App->audio->PlayFx(App->scene_intro->pink_blue_fx);
+			else
+				App->audio->PlayFx(App->scene_intro->rest_elem);
 		}
 
 		//Lever that pulls the button for double points up
 		else if (bodyB == button_up_sensor && button_up_sensed == true)
 		{
+			App->audio->PlayFx(App->scene_intro->yell_lev_fx);
 			App->scene_intro->yellow_lever_animation.PushBack({ 0, 0, 57, 19 });
 			App->scene_intro->yellow_lever_animation.PushBack({ 56, 0, 57, 19 });
 			App->scene_intro->yellow_lever_animation.PushBack({ 116, 0, 57, 19 });

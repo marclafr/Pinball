@@ -46,6 +46,7 @@ public:
 	SDL_Texture* shiny_twister_point;
 	SDL_Texture* shiny_weels;
 	SDL_Texture* end_screen;
+	SDL_Texture* yellow_lever;
 
 	uint bonus_fx;
 	p2Point<int> ray;
@@ -56,5 +57,7 @@ public:
 	Animation shiny_weels_animation;
 	Animation shiny_point_animation;
 	Animation twister;
+	Animation yellow_lever_animation;
+	
 
 };

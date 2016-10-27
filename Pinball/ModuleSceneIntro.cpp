@@ -41,6 +41,7 @@ bool ModuleSceneIntro::Start()
 	shiny_twister_point = App->textures->Load("pinball/shiny_twister_point.png");
 	shiny_weels = App->textures->Load("pinball/shiny_weels.png");
 	end_screen = App->textures->Load("pinball/Game_over.png");
+	yellow_lever = App->textures->Load("pinball/yellow_lever.png");
 
 	anim_time = GetTickCount();
 
@@ -310,6 +311,8 @@ update_status ModuleSceneIntro::Update()
 		}
 	}
 	App->renderer->Blit(shiny_twister_point, 116, 236, &(twister.GetCurrentFrame()));
+	App->renderer->Blit(buttons_texture, 235, 126, &(button.GetCurrentFrame()));
+	App->renderer->Blit(yellow_lever, 181, 60, &(yellow_lever_animation.GetCurrentFrame()));
 	return UPDATE_CONTINUE;
 }
 
@@ -358,6 +361,10 @@ void ModuleSceneIntro::Animations()
 	App->scene_intro->shiny_weels_animation.PushBack({ 95, 0, 23, 24 });
 	App->scene_intro->shiny_weels_animation.loop = false;
 	App->scene_intro->shiny_weels_animation.speed = 0.5f;
+
+	App->scene_intro->yellow_lever_animation.PushBack({ 0, 0, 57, 19 });
+	App->scene_intro->yellow_lever_animation.loop = false;
+	App->scene_intro->yellow_lever_animation.speed = 0.4f;
 }
 
 void ModuleSceneIntro::ShinyAnim()

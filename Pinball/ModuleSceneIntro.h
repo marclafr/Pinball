@@ -18,6 +18,7 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void Animations();
+	void ShinyAnim();
 
 public:
 	p2List<PhysBody*> circles;
@@ -46,9 +47,9 @@ public:
 	bool ray_on;
 
 	//Animations
-	//Animation* button_animation = nullptr;
 	Animation button;
 	Animation shiny_weels_animation;
+	Animation shiny_point_animation;
+	Animation twister;
 
-	void ShinyAnim();
 };

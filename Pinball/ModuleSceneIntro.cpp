@@ -288,6 +288,9 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->renderer->Blit(end_screen, 0, 167, NULL, 1.0f, 0);
 	}
+
+	App->renderer->Blit(shiny_points, 300, 49, &(shiny_point_animation.GetCurrentFrame()));
+	App->renderer->Blit(shiny_twister_point, 116, 236, &(twister.GetCurrentFrame()));
 	return UPDATE_CONTINUE;
 }
 
@@ -309,11 +312,26 @@ void ModuleSceneIntro::Animations()
 	shiny_weels_animation.PushBack({ 46, 0, 23, 24 });
 	shiny_weels_animation.PushBack({ 71, 0, 23, 24 });
 	shiny_weels_animation.PushBack({ 95, 0, 23, 24 });
-	//shiny_weels_animation.PushBack({ 120, 0, 23, 24 });
+
 	shiny_weels_animation.loop = true;
 	shiny_weels_animation.speed = 0.5f;
-	//button_animation = &button;
-	//App->renderer->Blit(buttons_texture, 0 , 0 , &(current_animation->GetCurrentFrame()));
+
+	shiny_point_animation.PushBack({ 7, 0, 8, 8 });
+	shiny_point_animation.PushBack({ 15, 0, 8, 8 });
+	shiny_point_animation.PushBack({ 24, 0, 8, 8 });
+	shiny_point_animation.loop = true;
+	shiny_point_animation.speed = 0.5;
+
+	twister.PushBack({ 0, 0, 34, 34 });
+	twister.PushBack({ 34, 0, 34, 34 });
+	twister.PushBack({ 68, 0, 34, 34 });
+	twister.PushBack({ 102, 0, 34, 34 });
+	twister.PushBack({ 136, 0, 34, 34 });
+	twister.PushBack({ 170, 0, 34, 34 });
+	twister.PushBack({ 204, 0, 34, 34 });
+	twister.PushBack({ 238, 0, 34, 34 });
+	twister.loop = true;
+	twister.speed = 0.1;
 }
 
 void ModuleSceneIntro::ShinyAnim()

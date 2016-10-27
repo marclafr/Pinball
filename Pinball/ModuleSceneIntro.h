@@ -35,8 +35,17 @@ public:
 	SDL_Texture* rick;
 	SDL_Texture* background;
 	SDL_Texture* elements;
+	SDL_Texture* buttons_texture;
+	SDL_Texture* shiny_points;
+	SDL_Texture* shiny_twister_point;
+	SDL_Texture* shiny_weels;
 
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
+
+	//Animations
+	//Animation* button_animation = nullptr;
+	Animation button;
+	Animation shiny_weels_animation;
 };

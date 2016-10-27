@@ -1516,6 +1516,7 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			if (i == 0 || i == 1)
 			{
 				//pink
+				App->renderer->Blit(App->scene_intro->shiny_weels, 297, 148, &(App->scene_intro->shiny_weels_animation.GetCurrentFrame()));
 
 			}
 			else if (i == 2 || i == 3)

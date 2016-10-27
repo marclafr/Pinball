@@ -805,6 +805,7 @@ update_status ModulePhysics::Update()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
+		App->scene_intro->hammer_down.Reset();
 		App->audio->PlayFx(App->scene_intro->initial_spring);
 		ball->body->ApplyForceToCenter(b2Vec2(0, -force), true);
 		force = 0;

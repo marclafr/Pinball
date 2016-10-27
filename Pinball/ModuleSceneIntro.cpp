@@ -348,15 +348,33 @@ update_status ModuleSceneIntro::Update()
 	}
 	if (App->physics->hammer_down == true)
 	{
-		App->renderer->Blit(hammer_texture, 358, 330, &(hammer_down.GetCurrentFrame()));
-		App->physics->hammer_down = false;
+		if (hammer_down.Finished() == true)
+		{
+			SDL_Rect hammer_r;
+			hammer_r.w = 18;
+			hammer_r.h = 15;
+			hammer_r.x = 192;
+			hammer_r.y = 0;
+			App->renderer->Blit(elements, 358, 385, &hammer_r);
+		}
+		else 
+		{
+			App->renderer->Blit(hammer_texture, 358, 330, &(hammer_down.GetCurrentFrame()));
+			App->physics->hammer_down = false;
+		}
 	}
 
-	if (App->physics->hammer_up == true)
+	else if (App->physics->hammer_up == true)
 	{
 		App->renderer->Blit(hammer_texture, 358, 330, &(hammer_up.GetCurrentFrame()));
 		App->physics->hammer_up = false;
 	}
+
+	else
+	{
+		App->renderer->Blit(hammer_texture, 358, 330);
+	}
+
 	App->renderer->Blit(buttons_texture, 235, 126, &(button.GetCurrentFrame()));
 	if (yell_lev == true)
 	{
@@ -372,13 +390,6 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->renderer->Blit(yellow_lever, 181, 60, &(yellow_lever_animation.GetCurrentFrame()));
 	}
-
-	SDL_Rect hammer_r;
-	hammer_r.w = 28;
-	hammer_r.h = 69;
-	hammer_r.x = 210;
-	hammer_r.y = 0;
-	App->renderer->Blit(elements, 352, 390, &hammer_r);
 	return UPDATE_CONTINUE;
 }
 
@@ -441,7 +452,7 @@ void ModuleSceneIntro::Animations()
 	App->scene_intro->hammer_down.PushBack({ 108, 0, 18, 69 });
 	App->scene_intro->hammer_down.PushBack({ 126, 0, 18, 69 });
 	App->scene_intro->hammer_down.PushBack({ 145, 0, 18, 69 });
-	App->scene_intro->hammer_down.loop = false;
+	App->scene_intro->hammer_down.loop = true;
 	App->scene_intro->hammer_down.speed = 0.4f;
 	
 
@@ -454,7 +465,7 @@ void ModuleSceneIntro::Animations()
 	App->scene_intro->hammer_up.PushBack({ 36, 0, 18, 69 });
 	App->scene_intro->hammer_up.PushBack({ 18, 0, 18, 69 });
 	App->scene_intro->hammer_up.PushBack({ 0, 0, 18, 69 });
-	App->scene_intro->hammer_up.loop = false;
+	App->scene_intro->hammer_up.loop = true;
 	App->scene_intro->hammer_up.speed = 5.0f;
 
 	//Button up

@@ -1535,7 +1535,7 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			App->scene_intro->button.PushBack({ 720, 0, 51, 77 });
 			App->scene_intro->button.PushBack({ 788, 0, 51, 77 });
 			App->scene_intro->button.loop = false;
-			App->scene_intro->button.speed = 0.1f;
+			App->scene_intro->button.speed = 0.4f;
 		}
 
 		//Left side of the map impulser
@@ -1560,6 +1560,21 @@ void ModulePhysics::OnCollision(PhysBody * bodyA, PhysBody * bodyB)
 			if (bodyB == button_pressed)
 			{
 				button_pressed_sensed = true;
+				App->scene_intro->button.PushBack({ 788, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 720, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 654, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 586, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 524, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 457, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 393, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 319, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 251, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 180, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 111, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 51, 0, 51, 77 });
+				App->scene_intro->button.PushBack({ 0, 0, 51, 77 });
+				App->scene_intro->button.loop = false;
+				App->scene_intro->button.speed = 0.5f;
 			}
 		}
 

@@ -2,7 +2,7 @@ Skatepark Pinball is an arcade game created by Vimto. Our goal is get the maximu
 
 We are:
 Marc Latorre (https://github.com/marclafr)
-Francisco Ruiz (https://github.com/ValencianoFran)
+Francisco Ruiz (https://github.com/botttos)
 
 And We did a new version of this Vimto's pinball:
 	http://www.classicgame.com/game/Skatepark+Pinball
